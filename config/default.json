@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://tomology:Tommys95!@bugtracker-ezmet.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "mysecrettoken"
+}
