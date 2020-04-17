@@ -5,6 +5,7 @@ const { check, validationResult } = require("express-validator");
 
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
+const Team = require("../../models/Team");
 
 // @route       GET api/people
 // @desc        Get all of a user's 'people'
@@ -128,19 +129,19 @@ router.post("/:id/requests", auth, async (req, res) => {
     // If user sends request to a user who has already sent them a request, automatically add to contacts
     if (
       currentUserProfile.receivedRequest.filter(
-        (request) => request.id === person.id.toString()
+        (request) => request.id === person.id
       ).length > 0
     ) {
       // Remove from sentRequest array
-      const sentRequestIndex = profile.sentRequest.map((request) =>
-        request.id.toString().indexOf(req.user.id)
-      );
+      const sentRequestIndex = profile.sentRequest
+        .map((request) => request.id)
+        .indexOf(req.user.id);
       profile.sentRequest.splice(sentRequestIndex, 1);
 
       // Remove from receivedRequest array
-      const receivedRequestIndex = currentUserProfile.receivedRequest.map(
-        (request) => request.id.indexOf(person.id.toString())
-      );
+      const receivedRequestIndex = currentUserProfile.receivedRequest
+        .map((request) => request.id)
+        .indexOf(person.id);
       currentUserProfile.receivedRequest.splice(receivedRequestIndex, 1);
 
       // Add to people array
@@ -172,12 +173,30 @@ router.post("/:id/requests", auth, async (req, res) => {
 router.get("/:id/requests", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
+
     // Check User
     if (req.params.id !== user.id) {
       return res.status(401).json({ msg: "Access Denied" });
     }
+
     const profile = await Profile.findOne({ user: user.id });
-    res.json(profile.receivedRequest);
+
+    // Split between team and user requests
+    let teamInvites = [];
+    let userInvites = [];
+
+    for (let i = 0; i < profile.receivedRequest.length; i++) {
+      const requestingUserProfile = await Profile.findOne({
+        user: profile.receivedRequest[i].id,
+      });
+      if (!requestingUserProfile) {
+        teamInvites.push(profile.receivedRequest[i]);
+      } else {
+        userInvites.push(profile.receivedRequest[i]);
+      }
+    }
+
+    res.json({ teamInvites: teamInvites, userInvites: userInvites });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -185,7 +204,7 @@ router.get("/:id/requests", auth, async (req, res) => {
 });
 
 // @route       POST api/people/:id/requests/:request_id
-// @desc        Accept or decline friend requests
+// @desc        Accept or decline team/friend requests
 // @access      Private
 router.post(
   "/:id/requests/:request_id",
@@ -205,11 +224,7 @@ router.post(
 
       const currentUserProfile = await Profile.findOne({ user: user.id });
 
-      const requestingUserProfile = await Profile.findOne({
-        user: req.params.request_id,
-      });
-
-      // Check if friend request received
+      // Check if request received
       if (
         currentUserProfile.receivedRequest.filter(
           (request) => request.id === req.params.request_id
@@ -220,31 +235,159 @@ router.post(
           .json({ msg: "You haven't received a request from this user." });
       }
 
-      // Remove from receivedRequest
-      const receivedRequestIndex = currentUserProfile.receivedRequest.map(
-        (request) => request.id.indexOf(user.id.toString())
-      );
+      // Determine whether team or user invite
+      const requestingUserProfile = await Profile.findOne({
+        user: req.params.request_id,
+      });
 
-      currentUserProfile.receivedRequest.splice(receivedRequestIndex, 1);
+      if (!requestingUserProfile) {
+        // Team Accept/Decline
+        const team = await Team.findById(req.params.request_id);
 
-      // Remove from sentRequest
-      const sentRequestIndex = requestingUserProfile.sentRequest
-        .map((request) => request.id.toString())
-        .indexOf(req.user.id);
+        // Remove from receivedRequest
+        const receivedRequestIndex = currentUserProfile.receivedRequest
+          .map((request) => request.id)
+          .indexOf(req.params.request_id);
 
-      requestingUserProfile.sentRequest.splice(sentRequestIndex, 1);
+        currentUserProfile.receivedRequest.splice(receivedRequestIndex, 1);
 
-      // If Approve
+        // If Accept
+        if (req.body.status === true) {
+          // Add team to profile
+          currentUserProfile.teams.unshift(req.params.request_id);
 
-      if (req.body.status === true) {
-        currentUserProfile.people.unshift(req.params.request_id);
-        requestingUserProfile.people.unshift(req.user.id);
+          // Change status to accepted
+          await Team.findOneAndUpdate(
+            {
+              _id: team.id,
+              "members._id": req.user.id,
+            },
+            { $set: { "members.$.status": "Accepted" } }
+          );
+
+          // Add all "accepted" team members to user's contacts and vice versa
+          const accepted = team.members
+            .filter((member) => member.status === "Accepted")
+            .map((member) => member._id);
+
+          const currentUserPeople = currentUserProfile.people.map(
+            (member) => member._id
+          );
+
+          for (let i = 0; i < accepted.length; i++) {
+            if (
+              currentUserPeople.indexOf(accepted[i]) === -1 &&
+              req.user.id !== accepted[i].toString()
+            ) {
+              currentUserProfile.people.unshift(accepted[i]);
+              const teamMemberProfile = await Profile.findOne({
+                user: accepted[i],
+              });
+              teamMemberProfile.people.unshift(user.id);
+
+              // Check if team member has sent a friend's request to user
+
+              if (
+                currentUserProfile.receivedRequest
+                  .map((request) => request._id)
+                  .indexOf(teamMemberProfile.user) > -1
+              ) {
+                // Remove received request
+                const removeReceivedIndex = currentUserProfile.receivedRequest
+                  .map((request) => request._id)
+                  .indexOf(teamMemberProfile.user);
+
+                currentUserProfile.receivedRequest.splice(
+                  removeReceivedIndex,
+                  1
+                );
+
+                // Remove sent request
+                const removeSentIndex = teamMemberProfile.sentRequest
+                  .map((request) => request._id)
+                  .indexOf(currentUserProfile.user);
+
+                teamMemberProfile.sentRequest.splice(removeSentIndex, 1);
+
+                await teamMemberProfile.save();
+                await currentUserProfile.save();
+              }
+
+              // Check if current user has sent a friends request to team member
+              if (
+                currentUserProfile.sentRequest
+                  .map((request) => request_id)
+                  .indexOf(teamMemberProfile.user) > -1
+              ) {
+                // Remove sent request
+                const removeSentIndex = currentUserProfile.sentRequest
+                  .map((request) => request._id)
+                  .indexOf(teamMemberProfile.user);
+
+                currentUserProfile.sentRequest.splice(removeSentIndex, 1);
+
+                // Remove received request
+                const removeReceivedIndex = teamMemberProfile.receivedRequest
+                  .map((request) => request._id)
+                  .indexOf(currentUserProfile.user);
+
+                teamMemberProfile.receivedRequest.splice(
+                  removeReceivedIndex,
+                  1
+                );
+
+                await teamMemberProfile.save();
+                await currentUserProfile.save();
+              }
+
+              await teamMemberProfile.save();
+              await currentUserProfile.save();
+            }
+          }
+
+          await currentUserProfile.save();
+
+          return res.json({ currentUserProfile });
+        }
+        // Remove declined member from team
+        const removeMemberIndex = team.members
+          .map((member) => member._id)
+          .indexOf(req.params.id);
+
+        team.members.splice(removeMemberIndex, 1);
+
+        await team.save();
+        await currentUserProfile.save();
+
+        res.json({ team });
+      } else {
+        // User Accept/Decline
+        // Remove from receivedRequest
+        const receivedRequestIndex = currentUserProfile.receivedRequest
+          .map((request) => request.id)
+          .indexOf(req.params.request_id);
+
+        currentUserProfile.receivedRequest.splice(receivedRequestIndex, 1);
+
+        // Remove from sentRequest
+        const sentRequestIndex = requestingUserProfile.sentRequest
+          .map((request) => request.id)
+          .indexOf(req.user.id);
+
+        requestingUserProfile.sentRequest.splice(sentRequestIndex, 1);
+
+        // If Accept
+
+        if (req.body.status === true) {
+          currentUserProfile.people.unshift(req.params.request_id);
+          requestingUserProfile.people.unshift(req.user.id);
+        }
+
+        await currentUserProfile.save();
+        await requestingUserProfile.save();
+
+        res.json({ currentUserProfile, requestingUserProfile });
       }
-
-      await currentUserProfile.save();
-      await requestingUserProfile.save();
-
-      res.json({ currentUserProfile, requestingUserProfile });
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
