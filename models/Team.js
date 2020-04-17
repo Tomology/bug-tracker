@@ -10,8 +10,14 @@ const TeamSchema = new mongoose.Schema({
   },
   members: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      member: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+      status: {
+        type: String,
+        default: "Invited",
+      },
     },
   ],
   creator: {

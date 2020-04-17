@@ -5,7 +5,7 @@ const { check, validationResult } = require("express-validator");
 
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
-const Team = require("../../models/team");
+const Team = require("../../models/Team");
 
 // @route       POST api/teams
 // @desc        Start a team
