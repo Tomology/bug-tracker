@@ -17,6 +17,14 @@ const ProfileSchema = new mongoose.Schema({
   location: {
     type: String,
   },
+  projects: [
+    {
+      project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "project",
+      },
+    },
+  ],
   teams: [
     {
       team: {

@@ -7,25 +7,29 @@ const User = require("../../models/User");
 const Profile = require("../../models/Profile");
 const Team = require("../../models/Team");
 
-// @route       GET api/bugtest/:id/request/:request_id
+// @route       N/A
 // @desc        Test bugs out
 // @access      Private
-router.get("/:id/request/:request_id", auth, async (req, res) => {
-  const team = await Team.findById(req.params.request_id);
-  const currentUserProfile = await Profile.findOne({ user: req.user.id });
-  const user = await User.findById(req.user.id);
+router.get("/:project_id", auth, async (req, res) => {
   try {
-    // Remove declined user from members
+    const profile = await Profile.findOne({ user: req.user.id });
 
-    const removeMemberIndex = team.members
-      .map((member) => member._id)
-      .indexOf(req.params.id);
+    const allProjectIds = [...profile.projects];
 
-    team.members.splice(removeMemberIndex, 1);
+    for (let i = 0; i < profile.teams.length; i++) {
+      const team = await Team.findById(profile.teams[i]._id);
+      team.projects.map((project) => allProjectIds.unshift(project));
+    }
 
-    console.log(team);
+    if (
+      allProjectIds
+        .map((project) => project._id.toString())
+        .indexOf(req.params.project_id) === -1
+    ) {
+      return res.status(401).json({ msg: "Unauthorized to access project" });
+    }
 
-    res.json({});
+    res.json(allProjectIds);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

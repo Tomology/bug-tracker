@@ -6,6 +6,7 @@ const { check, validationResult } = require("express-validator");
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
 const Team = require("../../models/Team");
+const Project = require("../../models/Project");
 
 // @route       GET api/people
 // @desc        Get all of a user's 'people'
@@ -68,15 +69,15 @@ router.post(
   }
 );
 
-// @route       GET api/people/:id
+// @route       GET api/people/:user_id
 // @desc        Get specific user's profile
 // @access      Private
 
-router.get("/:id", auth, async (req, res) => {
+router.get("/:user_id", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      user: req.params.id,
-    }).populate("user", ["name", "email"]);
+      user: req.params.user_id,
+    }).populate("user", ["firstName", "lastName", "email"]);
 
     res.json(profile);
   } catch (err) {
@@ -85,12 +86,12 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-// @route       POST api/people/:id/requests
+// @route       POST api/people/:user_id/requests
 // @desc        Send 'friends' request
 // @access      Private
-router.post("/:id/requests", auth, async (req, res) => {
+router.post("/:user_id/requests", auth, async (req, res) => {
   try {
-    const person = await User.findById(req.params.id);
+    const person = await User.findById(req.params.user_id);
     const currentUser = await User.findById(req.user.id);
 
     if (!person) {
@@ -167,19 +168,19 @@ router.post("/:id/requests", auth, async (req, res) => {
   }
 });
 
-// @route GET api/people/:id/requests
+// @route GET api/people/:user_id/requests
 // @desc Lists all pending requests for current user
 // @access Private
-router.get("/:id/requests", auth, async (req, res) => {
+router.get("/:user_id/requests", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
 
     // Check User
-    if (req.params.id !== user.id) {
+    if (req.params.user_id !== user.id) {
       return res.status(401).json({ msg: "Access Denied" });
     }
 
-    const profile = await Profile.findOne({ user: user.id });
+    const profile = await Profile.findOne({ user: user._id });
 
     // Split between team and user requests
     let teamInvites = [];
@@ -188,11 +189,14 @@ router.get("/:id/requests", auth, async (req, res) => {
     for (let i = 0; i < profile.receivedRequest.length; i++) {
       const requestingUserProfile = await Profile.findOne({
         user: profile.receivedRequest[i].id,
-      });
+      }).populate("user", ["firstName", "lastName"]);
       if (!requestingUserProfile) {
-        teamInvites.push(profile.receivedRequest[i]);
+        const requestingTeam = await Team.findById(
+          profile.receivedRequest[i].id
+        ).select(["teamName", "creator"]);
+        teamInvites.push(requestingTeam);
       } else {
-        userInvites.push(profile.receivedRequest[i]);
+        userInvites.push(requestingUserProfile);
       }
     }
 
@@ -316,7 +320,7 @@ router.post(
               // Check if current user has sent a friends request to team member
               if (
                 currentUserProfile.sentRequest
-                  .map((request) => request_id)
+                  .map((request) => request._id)
                   .indexOf(teamMemberProfile.user) > -1
               ) {
                 // Remove sent request
@@ -395,21 +399,20 @@ router.post(
   }
 );
 
-// @route       POST api/people/:id
+// @route       POST api/people/:user_id
 // @desc        Update or edit profile
 // @access      Private
-router.post("/:id", auth, async (req, res) => {
+router.post("/:user_id", auth, async (req, res) => {
   const { jobTitle, department, organization, location } = req.body;
 
   // Build profile object
   const profileFields = {};
-  profileFields.user = req.user.id;
   if (jobTitle) profileFields.jobTitle = jobTitle;
   if (department) profileFields.department = department;
   if (organization) profileFields.organization = organization;
   if (location) profileFields.location = location;
   try {
-    let profile = await Profile.findOne({ user: req.params.id });
+    let profile = await Profile.findOne({ user: req.params.user_id });
 
     // Check user
     if (profile.user.toString() !== req.user.id) {
@@ -428,6 +431,191 @@ router.post("/:id", auth, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
+  }
+});
+
+// @route       DELETE api/people/:id
+// @desc        Delete Account
+// @access      Private
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    // Check user
+    if (req.user.id !== req.params.id) {
+      return res
+        .status(401)
+        .json({ msg: "You can't delete another user's profile." });
+    }
+
+    const profile = await Profile.findOne({ user: req.user.id });
+    const user = await User.findById(req.user.id);
+
+    // DELETE ALL OF THE USER'S PROJECTS
+    const projectsToDelete = [];
+    const projectsToRemoveUserFrom = [];
+
+    // Differentiate between projects
+    for (let i = 0; i < profile.projects.length; i++) {
+      const userProject = await Project.findById(profile.projects[i]._id);
+      if (userProject.user.toString() === req.user.id) {
+        projectsToDelete.unshift(profile.projects[i]._id);
+      } else {
+        projectsToRemoveUserFrom.unshift(profile.projects[i]._id);
+      }
+    }
+
+    // Remove user from members array for teams they didn't create
+    for (let i = 0; i < projectsToRemoveUserFrom.length; i++) {
+      const project = await Project.findById(projectsToRemoveUserFrom[i]);
+      const removeUserIndex = project.sharedWith
+        .map((sharee) => sharee._id)
+        .indexOf(req.user.id);
+      project.sharedWith.splice(removeUserIndex, 1);
+      await project.save();
+    }
+
+    // Remove project from users it has been shared with
+    for (let i = 0; i < projectsToDelete.length; i++) {
+      const project = await Project.findById(projectsToDelete[i]);
+
+      for (let j = 0; j < project.sharedWith.length; j++) {
+        const sharedWithUser = await Profile.findOne({
+          user: project.sharedWith[j],
+        });
+        if (!sharedWithUser) {
+          const sharedWithTeam = await Team.findById(project.sharedWith[j]);
+          const removeProjectIndex = sharedWithTeam.projects
+            .map((project) => project._id)
+            .indexOf(projectsToDelete[i]);
+          sharedWithTeam.projects.splice(removeProjectIndex, 1);
+          await sharedWithTeam.save();
+        } else {
+          const removeProjectIndex = sharedWithUser.projects
+            .map((project) => project._id)
+            .indexOf(projectsToDelete[i]);
+          sharedWithUser.projects.splice(removeProjectIndex, 1);
+          await sharedWithUser.save();
+        }
+      }
+    }
+
+    // Delete Project(s)
+    for (let i = 0; i < projectsToDelete.length; i++) {
+      const projectRemoval = await Project.findById(projectsToDelete[i]);
+      await projectRemoval.remove();
+    }
+
+    // DELETE ALL OF A USER'S TEAMS
+    const teamsToDelete = [];
+    const teamsToRemoveUserFrom = [];
+
+    // Differentiate between teams
+    for (let i = 0; i < profile.teams.length; i++) {
+      const userTeam = await Team.findById(profile.teams[i]._id);
+      if (userTeam.creator.toString() === req.user.id) {
+        teamsToDelete.unshift(profile.teams[i]._id);
+      } else {
+        teamsToRemoveUserFrom.unshift(profile.teams[i]._id);
+      }
+    }
+
+    // Remove user from members array for teams they didn't create
+    for (let i = 0; i < teamsToRemoveUserFrom.length; i++) {
+      const team = await Team.findById(teamsToRemoveUserFrom[i]);
+      const removeUserIndex = team.members
+        .map((member) => member._id)
+        .indexOf(req.user.id);
+      team.members.splice(removeUserIndex, 1);
+      await team.save();
+    }
+
+    // Remove team from team member's teams
+    for (let i = 0; i < teamsToDelete.length; i++) {
+      const team = await Team.findById(teamsToDelete[i]);
+      for (let j = 0; j < team.members.length; j++) {
+        const teamMember = await Profile.findOne({
+          user: team.members[j]._id,
+        });
+
+        if (team.members[j].status === "Accepted") {
+          const removeTeamIndex = teamMember.teams
+            .map((team) => team._id)
+            .indexOf(teamsToDelete[i]);
+          teamMember.teams.splice(removeTeamIndex, 1);
+          await teamMember.save();
+        } else {
+          const removeRequestIndex = teamMember.receivedRequest
+            .map((request) => request._id)
+            .indexOf(teamsToDelete[i]);
+          teamMember.receivedRequest.splice(removeRequestIndex, 1);
+          await teamMember.save();
+        }
+      }
+    }
+
+    // Delete Team(s)
+    for (let i = 0; i < teamsToDelete.length; i++) {
+      const teamRemoval = await Team.findById(teamsToDelete[i]);
+      await teamRemoval.remove();
+    }
+
+    // Remove from contacts
+    for (let i = 0; i < profile.people.length; i++) {
+      const friendProfile = await Profile.findOne({
+        user: profile.people[i]._id,
+      });
+
+      const removeUserIndex = friendProfile.people
+        .map((person) => person._id)
+        .indexOf(req.user.id);
+      friendProfile.people.splice(removeUserIndex, 1);
+      await friendProfile.save();
+    }
+
+    // Remove from sentRequest
+    for (let i = 0; i < profile.sentRequest.length; i++) {
+      const friendProfile = await Profile.findOne({
+        user: profile.sentRequest[i]._id,
+      });
+
+      const removeUserIndex = friendProfile.receivedRequest
+        .map((request) => request._id)
+        .indexOf(req.user.id);
+
+      friendProfile.receivedRequest.splice(removeUserIndex, 1);
+      await friendProfile.save();
+    }
+
+    // Remove from receivedRequest
+    for (let i = 0; i < profile.receivedRequest.length; i++) {
+      const friendProfile = await Profile.findOne({
+        user: profile.receivedRequest[i]._id,
+      });
+
+      if (!friendProfile) {
+        const teamRequest = await Team.findById(profile.receivedRequest[i]._id);
+
+        const removeUserIndex = teamRequest.members
+          .map((member) => member._id)
+          .indexOf(req.user.id);
+        teamRequest.members.splice(removeUserIndex, 1);
+        await teamRequest.save();
+      } else {
+        const removeUserIndex = friendProfile.sentRequest
+          .map((request) => request._id)
+          .indexOf(req.user.id);
+        friendProfile.sentRequest.splice(removeUserIndex, 1);
+        await friendProfile.save();
+      }
+    }
+
+    // Delete User & Profile
+    await user.remove();
+    await profile.remove();
+
+    res.json({ msg: "Account Deleted" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
   }
 });
 
