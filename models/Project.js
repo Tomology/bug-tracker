@@ -3,14 +3,7 @@ const mongoose = require("mongoose");
 const ProjectSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-  name: {
-    // if user deletes profile, their name on the project remains.
-    type: String,
-  },
-  avatar: {
-    type: String,
+    ref: "user",
   },
   projectName: {
     type: String,
@@ -20,11 +13,19 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  sharedWith: [
+    {
+      sharee: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+    },
+  ],
   issues: [
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
       },
       issueType: {
         type: String,
@@ -42,11 +43,18 @@ const ProjectSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      progress: {
+        progress: { type: String, default: "Open" },
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      },
       assignee: [
         {
           user: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: "user",
           },
         },
       ],
@@ -61,7 +69,7 @@ const ProjectSchema = new mongoose.Schema({
         {
           user: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: "user",
           },
           text: {
             type: String,
@@ -87,4 +95,4 @@ const ProjectSchema = new mongoose.Schema({
   },
 });
 
-module.exports = Project = mongoose.model("Project", ProjectSchema);
+module.exports = Project = mongoose.model("project", ProjectSchema);

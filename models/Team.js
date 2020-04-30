@@ -20,6 +20,14 @@ const TeamSchema = new mongoose.Schema({
       },
     },
   ],
+  projects: [
+    {
+      project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "project",
+      },
+    },
+  ],
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
