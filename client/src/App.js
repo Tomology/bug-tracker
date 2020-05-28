@@ -7,7 +7,10 @@ import Login from "./components/auth/Login";
 import Alert from "./components/layout/Alert";
 import Dashboard from "./components/dashboard/Dashboard";
 import Profile from "./components/profile/Profile";
-import EditProfile from "./components/profile/EditProfile"; // Delete this once profile component complete. Only here to test.
+import People from "./components/people/People";
+import Team from "./components/team/Team";
+import Projects from "./components/projects/Projects";
+import Project from "./components/project/Project";
 import PrivateRoute from "./components/routing/PrivateRoute";
 
 import "./App.css";
@@ -31,19 +34,25 @@ const App = () => {
       <Router>
         <Fragment>
           <Route exact path="/" component={Landing} />
-          <Navbar />
           <section className="container">
             <Alert />
             <Switch>
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
-              <Route exact path="/people/:user_id" component={Profile} />
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/people" component={People} />
+              <PrivateRoute exact path="/people/:user_id" component={Profile} />
               <PrivateRoute
                 exact
-                path="/edit-profile"
-                component={EditProfile}
+                path="/people/team/:team_id"
+                component={Team}
               />
+              <PrivateRoute exact path="/projects" component={Projects} />
+              <PrivateRoute
+                exact
+                path="/projects/:project_id"
+                component={Project}
+              />
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
             </Switch>
           </section>
         </Fragment>

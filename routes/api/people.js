@@ -14,8 +14,16 @@ const Project = require("../../models/Project");
 router.get("/", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
-    const people = profile.people;
-    res.json({ people });
+    const peopleArr = [];
+    for (let i = 0; i < profile.people.length; i++) {
+      const contactProfile = await Profile.findOne({
+        user: profile.people[i]._id,
+      })
+        .populate("user", ["firstName", "lastName"])
+        .select(["jobTitle", "organization"]);
+      peopleArr.push(contactProfile);
+    }
+    res.json(peopleArr);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -59,7 +67,7 @@ router.post(
       // Find profile
       const profile = await Profile.findOne({
         user: person.id,
-      }).populate("user", ["name", "email"]);
+      }).populate("user", ["firstName", "lastName"]);
 
       res.json(profile);
     } catch (err) {
@@ -152,7 +160,7 @@ router.post("/:user_id/requests", auth, async (req, res) => {
       await profile.save();
       await currentUserProfile.save();
 
-      return res.json({ profile, currentUserProfile });
+      return res.json(currentUserProfile);
     }
 
     profile.receivedRequest.unshift(currentUser);
@@ -161,16 +169,16 @@ router.post("/:user_id/requests", auth, async (req, res) => {
     await profile.save();
     await currentUserProfile.save();
 
-    res.json({ profile, currentUserProfile });
+    res.json(currentUserProfile);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
 
-// @route GET api/people/:user_id/requests
-// @desc Lists all pending requests for current user
-// @access Private
+// @route       GET api/people/:user_id/requests
+// @desc        Lists all pending requests for current user
+// @access      Private
 router.get("/:user_id/requests", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -183,8 +191,7 @@ router.get("/:user_id/requests", auth, async (req, res) => {
     const profile = await Profile.findOne({ user: user._id });
 
     // Split between team and user requests
-    let teamInvites = [];
-    let userInvites = [];
+    let invites = [];
 
     for (let i = 0; i < profile.receivedRequest.length; i++) {
       const requestingUserProfile = await Profile.findOne({
@@ -193,25 +200,27 @@ router.get("/:user_id/requests", auth, async (req, res) => {
       if (!requestingUserProfile) {
         const requestingTeam = await Team.findById(
           profile.receivedRequest[i].id
-        ).select(["teamName", "creator"]);
-        teamInvites.push(requestingTeam);
+        )
+          .select(["teamName", "creator"])
+          .populate("creator", ["firstName", "lastName"]);
+        invites.push(requestingTeam);
       } else {
-        userInvites.push(requestingUserProfile);
+        invites.push(requestingUserProfile);
       }
     }
 
-    res.json({ teamInvites: teamInvites, userInvites: userInvites });
+    res.json(invites);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
 
-// @route       POST api/people/:id/requests/:request_id
+// @route       POST api/people/:user_id/requests/:request_id
 // @desc        Accept or decline team/friend requests
 // @access      Private
 router.post(
-  "/:id/requests/:request_id",
+  "/:user_id/requests/:request_id",
   [auth, [check("status").isBoolean()]],
   async (req, res) => {
     const errors = validationResult(req);
@@ -222,11 +231,13 @@ router.post(
       const user = await User.findById(req.user.id);
 
       // Check User
-      if (req.params.id !== user.id) {
+      if (req.params.user_id !== user.id) {
         return res.status(401).json({ msg: "Access Denied " });
       }
 
-      const currentUserProfile = await Profile.findOne({ user: user.id });
+      const currentUserProfile = await Profile.findOne({
+        user: user.id,
+      }).populate("user", ["firstName", "lastName", "email"]);
 
       // Check if request received
       if (
@@ -242,7 +253,7 @@ router.post(
       // Determine whether team or user invite
       const requestingUserProfile = await Profile.findOne({
         user: req.params.request_id,
-      });
+      }).populate("user", ["firstName", "lastName"]);
 
       if (!requestingUserProfile) {
         // Team Accept/Decline
@@ -356,7 +367,7 @@ router.post(
         // Remove declined member from team
         const removeMemberIndex = team.members
           .map((member) => member._id)
-          .indexOf(req.params.id);
+          .indexOf(req.params.user_id);
 
         team.members.splice(removeMemberIndex, 1);
 
@@ -390,7 +401,7 @@ router.post(
         await currentUserProfile.save();
         await requestingUserProfile.save();
 
-        res.json({ currentUserProfile, requestingUserProfile });
+        res.json(requestingUserProfile);
       }
     } catch (err) {
       console.error(err.message);
@@ -398,6 +409,80 @@ router.post(
     }
   }
 );
+
+// @route       DELETE api/people/:user_id/remove
+// @desc        Remove user from contacts
+// @access      Private
+router.delete("/:user_id/remove", auth, async (req, res) => {
+  try {
+    const currentUserProfile = await Profile.findOne({ user: req.user.id });
+    const removeUserProfile = await Profile.findOne({
+      user: req.params.user_id,
+    });
+
+    // Check if user in contacts
+    if (
+      currentUserProfile.people
+        .map((person) => person._id)
+        .indexOf(req.params.user_id) === -1
+    ) {
+      res.status(400).json({ msg: "User not in contacts" });
+    }
+
+    // Check if user is a mutual team member
+    for (let i = 0; i < currentUserProfile.teams.length; i++) {
+      const team = await Team.findById(currentUserProfile.teams[i]);
+
+      if (
+        team.creator === req.params.user_id ||
+        team.members.map((member) => member._id).indexOf(req.params.user_id) !==
+          -1
+      ) {
+        return res.status(400).json({
+          msg:
+            "Cannot remove user from contacts that is a member of a mutual team. ",
+        });
+      }
+    }
+
+    for (let i = 0; i < removeUserProfile.teams.length; i++) {
+      const team = await Team.findById(removeUserProfile.teams[i]);
+
+      if (
+        team.creator === req.user._id ||
+        team.members.map((member) => member._id).indexOf(req.user.id) !== -1
+      ) {
+        return res.status(400).json({
+          msg:
+            "Cannot remove user from contacts that is a member of a mutual team. ",
+        });
+      }
+    }
+
+    // Remove contact from current user's people
+    const removeIndexCU = currentUserProfile.people
+      .map((person) => person._id)
+      .indexOf(req.params.user_id);
+
+    currentUserProfile.people.splice(removeIndexCU, 1);
+
+    await currentUserProfile.save();
+
+    // Remove current user from contact's people
+    const removeIndexRU = removeUserProfile.people
+      .map((person) => person._id)
+      .indexOf(req.params.user_id);
+
+    removeUserProfile.people.splice(removeIndexRU, 1);
+
+    await removeUserProfile.save();
+
+    res.json({ msg: "User Removed" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 // @route       POST api/people/:user_id
 // @desc        Update or edit profile
@@ -407,6 +492,7 @@ router.post("/:user_id", auth, async (req, res) => {
 
   // Build profile object
   const profileFields = {};
+
   if (jobTitle) profileFields.jobTitle = jobTitle;
   if (department) profileFields.department = department;
   if (organization) profileFields.organization = organization;
@@ -425,7 +511,7 @@ router.post("/:user_id", auth, async (req, res) => {
       { user: req.user.id },
       { $set: profileFields },
       { new: true }
-    );
+    ).populate("user", ["firstName", "lastName", "email"]);
 
     return res.json(profile);
   } catch (err) {
@@ -434,13 +520,13 @@ router.post("/:user_id", auth, async (req, res) => {
   }
 });
 
-// @route       DELETE api/people/:id
+// @route       DELETE api/people/:user_id
 // @desc        Delete Account
 // @access      Private
-router.delete("/:id", auth, async (req, res) => {
+router.delete("/:user_id", auth, async (req, res) => {
   try {
     // Check user
-    if (req.user.id !== req.params.id) {
+    if (req.user.id !== req.params.user_id) {
       return res
         .status(401)
         .json({ msg: "You can't delete another user's profile." });

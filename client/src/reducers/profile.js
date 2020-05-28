@@ -4,6 +4,9 @@ import {
   CLEAR_PROFILE,
   GET_REQUESTS,
   REQUEST_ERROR,
+  FRIEND_REQUEST_RESPONSE,
+  FRIEND_REQUEST_RESPONSE_DECLINE,
+  FRIEND_REQUEST_SENT,
 } from "../actions/types";
 
 const initialState = {
@@ -27,6 +30,40 @@ export default function (state = initialState, action) {
       return {
         ...state,
         receivedRequests: payload,
+        loading: false,
+      };
+    case FRIEND_REQUEST_SENT:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          sentRequest: payload.sentRequest,
+          receivedRequest: payload.receivedRequest,
+          people: payload.people,
+        },
+        loading: false,
+      };
+    case FRIEND_REQUEST_RESPONSE:
+      return {
+        ...state,
+        receivedRequests: state.receivedRequests.filter((invite) => {
+          if (invite.user) {
+            return invite.user._id !== payload;
+          } else {
+            return invite._id !== payload;
+          }
+        }),
+        loading: false,
+      };
+    case FRIEND_REQUEST_RESPONSE_DECLINE:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          receivedRequest: state.profile.receivedRequest.filter(
+            (invite) => invite._id !== payload
+          ),
+        },
         loading: false,
       };
     case REQUEST_ERROR:

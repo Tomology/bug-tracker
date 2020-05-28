@@ -30,6 +30,7 @@ router.post(
 
     try {
       const profile = await Profile.findOne({ user: req.user.id });
+      const user = await User.findById(req.user.id);
 
       const { projectName, key, sharedWith } = req.body;
 
@@ -37,11 +38,11 @@ router.post(
         projectName: projectName,
         key: key,
         user: req.user.id,
+        name: `${user.firstName} ${user.lastName}`,
         sharedWith: sharedWith,
       });
 
       const project = await newProject.save();
-
       profile.projects.unshift(project.id);
 
       await profile.save();
@@ -50,14 +51,17 @@ router.post(
 
       const shareProject = (sharedWithArray) => {
         sharedWithArray.map(async (sharee) => {
-          const sharedWithProfile = await Profile.findOne({ user: sharee._id });
+          const sharedWithProfile = await Profile.findOne({
+            user: sharee._id,
+          });
           if (!sharedWithProfile) {
             const sharedWithTeam = await Team.findById(sharee._id);
             sharedWithTeam.projects.unshift(project.id);
             await sharedWithTeam.save();
+          } else {
+            sharedWithProfile.projects.unshift(project.id);
+            await sharedWithProfile.save();
           }
-          sharedWithProfile.projects.unshift(project.id);
-          await sharedWithProfile.save();
         });
       };
 
@@ -65,7 +69,11 @@ router.post(
         shareProject(sharedWith);
       }
 
-      res.json({ project, profile });
+      const populatedProject = await Project.findById(
+        project._id
+      ).populate("user", ["firstName", "lastName"]);
+
+      res.json(populatedProject);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
@@ -103,17 +111,24 @@ router.post("/:project_id", auth, async (req, res) => {
         .filter((sharee) => currentSharees.indexOf(sharee) === -1);
 
       for (let i = 0; i < newSharees.length; i++) {
-        const shareeProfile = await Profile.findOne({ user: newSharees[i] });
+        const shareeProfile = await Profile.findOne({
+          user: newSharees[i],
+        }).populate("user", ["firstName", "lastName"]);
         if (!shareeProfile) {
           const team = await Team.findById(newSharees[i]);
-          console.log(team);
           team.projects.unshift(project.id);
-          project.sharedWith.unshift(newSharees[i]);
+          project.sharedWith.unshift({
+            _id: newSharees[i],
+            name: team.teamName,
+          });
           await team.save();
           await project.save();
         } else {
           shareeProfile.projects.unshift(project.id);
-          project.sharedWith.unshift(newSharees[i]);
+          project.sharedWith.unshift({
+            _id: newSharees[i],
+            name: `${shareeProfile.user.firstName} ${shareeProfile.user.lastName}`,
+          });
           await shareeProfile.save();
           await project.save();
         }
@@ -226,11 +241,9 @@ router.get("/", auth, async (req, res) => {
     // Get all projects and remove duplicates
     const allProjects = [];
     for (let i = 0; i < allProjectIds.length; i++) {
-      const project = await Project.findById(allProjectIds[i]).select([
-        "projectName",
-        "key",
-        "user",
-      ]);
+      const project = await Project.findById(allProjectIds[i])
+        .select(["projectName", "key", "user", "sharedWith"])
+        .populate("user", ["firstName", "lastName"]);
 
       if (
         allProjects
@@ -289,6 +302,16 @@ router.delete("/:project_id", auth, async (req, res) => {
         .json({ msg: "You can't delete a project you didn't create." });
     }
 
+    // Remove project from creator's projects array
+    const currentUserProfile = await Profile.findOne({ user: req.user.id });
+    const projectIndex = currentUserProfile.projects
+      .map((project) => project._id)
+      .indexOf(req.params.project_id);
+
+    currentUserProfile.projects.splice(projectIndex, 1);
+
+    await currentUserProfile.save();
+
     // Remove project from all users/teams it has been shared with
     project.sharedWith.map(async (sharee) => {
       const shareProfile = await Profile.findOne({ user: sharee._id });
@@ -296,14 +319,14 @@ router.delete("/:project_id", auth, async (req, res) => {
         const shareTeam = await Team.findById(sharee._id);
         const removeIndex = shareTeam.projects
           .map((project) => project._id)
-          .indexOf(req.params.id);
+          .indexOf(req.params.project_id);
         shareTeam.projects.splice(removeIndex, 1);
 
         await shareTeam.save();
       } else {
         const removeIndex = shareProfile.projects
           .map((project) => project._id)
-          .indexOf(req.params.id);
+          .indexOf(req.params.project_id);
         shareProfile.projects.splice(removeIndex, 1);
 
         await shareProfile.save();
@@ -330,6 +353,7 @@ router.post(
   [
     auth,
     [
+      check("issueName", "Issue name is required").not().isEmpty(),
       check("issueType", "Issue type is required").not().isEmpty(),
       check("summary", "Summary is required").not().isEmpty(),
       check("description", "Description is required").not().isEmpty(),
@@ -347,6 +371,7 @@ router.post(
       const project = await Project.findById(req.params.project_id);
 
       const {
+        issueName,
         issueType,
         summary,
         description,
@@ -357,10 +382,12 @@ router.post(
 
       const newIssue = {
         issueType: issueType,
+        issueName: issueName,
+        issueNumber: project.issues.length + 1,
         summary: summary,
         description: description,
         priority: priority,
-        name: user.name,
+        name: `${user.firstName} ${user.lastName}`,
         user: req.user.id,
         assignee: assignee,
         dueDate: dueDate,
@@ -379,20 +406,13 @@ router.post(
 );
 
 // @route       POST api/projects/:project_id/issues/:issue_id
-// @desc        Change progress on an issue
+// @desc        Change status of an issue
 // @access      Private
-router.post("/project_id/issues/:issue_id", auth, async (req, res) => {
+router.post("/:project_id/issues/:issue_id", auth, async (req, res) => {
   try {
     let project = await Project.findById(req.params.project_id);
-    const {
-      issueType,
-      summary,
-      description,
-      priority,
-      progress,
-      assignee,
-      dueDate,
-    } = req.body;
+    let user = await User.findById(req.user.id);
+    const { progress } = req.body;
 
     if (!progress) {
       return res.status(400).json({ msg: "Bad Request" });
@@ -407,17 +427,91 @@ router.post("/project_id/issues/:issue_id", auth, async (req, res) => {
         $set: {
           "issues.$.progress.progress": `${progress}`,
           "issues.$.progress.user": `${req.user.id}`,
+          "issues.$.progress.name": `${user.firstName} ${user.lastName}`,
         },
       },
       { new: true }
     );
 
-    res.json(project);
+    res.json(project.issues);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
+
+// @route       POST api/projects/:project_id/issues/:issue_id/edit
+// @desc        Edit an issue
+// @access      Private
+router.post(
+  "/:project_id/issues/:issue_id/edit",
+  [
+    auth,
+    [
+      check("issueName", "Issue name is required").not().isEmpty(),
+      check("issueType", "Issue type is required").not().isEmpty(),
+      check("summary", "Summary is required").not().isEmpty(),
+      check("description", "Description is required").not().isEmpty(),
+      check("priority", "Priority is required").not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      let project = await Project.findById(req.params.project_id);
+
+      const {
+        issueType,
+        issueName,
+        summary,
+        description,
+        priority,
+        dueDate,
+        assignee,
+      } = req.body;
+
+      // Get issue index
+      const issueIndex = project.issues
+        .map((issue) => issue._id)
+        .indexOf(req.params.issue_id);
+
+      // Check if user is project creator and/or issue creator
+      if (
+        req.user.id !== project.user.toString() ||
+        req.user.id !== project.issues[issueIndex].user.toString()
+      ) {
+        return res.status(401).json({ msg: "Unauthorized to edit issue" });
+      }
+
+      project = await Project.findOneAndUpdate(
+        {
+          _id: project.id,
+          "issues._id": req.params.issue_id,
+        },
+        {
+          $set: {
+            "issues.$.issueType": `${issueType}`,
+            "issues.$.issueName": `${issueName}`,
+            "issues.$.summary": `${summary}`,
+            "issues.$.description": `${description}`,
+            "issues.$.priority": `${priority}`,
+            "issues.$.dueDate": dueDate,
+            "issues.$.assignee": assignee,
+          },
+        },
+        { new: true }
+      );
+
+      res.json(project.issues);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
 
 // @route       DELETE api/projects/:project_id/issues/:issue_id
 // @desc        Delete an issue
@@ -436,8 +530,11 @@ router.delete("/:project_id/issues/:issue_id", auth, async (req, res) => {
       return res.status(404).json({ msg: "Issue does not exist" });
     }
 
+    const issueCreator = issue.user.toString() !== req.user.id;
+    const projectCreator = project.user.toString() !== req.user.id;
+
     // Check user
-    if (issue.user.toString() !== req.user.id) {
+    if (issueCreator === true && projectCreator === true) {
       return res
         .status(401)
         .json({ msg: "You can't delete an issue you didn't create." });
@@ -475,8 +572,7 @@ router.post(
 
       const newComment = {
         text: req.body.text,
-        name: user.name,
-        // add avatar
+        name: `${user.firstName} ${user.lastName}`,
         user: req.user.id,
       };
 
