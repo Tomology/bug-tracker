@@ -2,6 +2,7 @@ import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import Register from "../auth/Register";
 
 const Landing = ({ isAuthenticated }) => {
   if (isAuthenticated) {
@@ -9,20 +10,36 @@ const Landing = ({ isAuthenticated }) => {
   }
 
   return (
-    <section className="landing">
-      <div className="landing-inner">
-        <p className="lead">Track your projects and issues!</p>
-        <img src={require("../../img/landing2.png")} alt="" />
-        <div className="buttons">
-          <Link to="/register" className="btn btn-primary">
-            Get Started
-          </Link>
-          <Link to="/login" className="btn">
-            Login
-          </Link>
+    <body class="container">
+      <section className="landing">
+        <div class="landing__text">
+          <h1 class="heading-primary">
+            <span class="heading-primary--main landing__logo">Cimex</span>
+            <span class="heading-primary--sub">
+              Project management and issue tracking
+            </span>
+          </h1>
+
+          <ul class="landing__text--list">
+            <li>Manage your projects</li>
+            <li>Track your issues</li>
+            <li>Collaborate with others</li>
+            <li>Track your projects</li>
+            <li>Track your projects</li>
+          </ul>
+
+          <img src="../img/landing2.svg" alt="coders" class="landing__img" />
         </div>
-      </div>
-    </section>
+        <div class="auth">
+          <div class="auth__toggle">
+            <div class="btn-toggle-color"></div>
+            <button class="auth__toggle--register btn-toggle">Register</button>
+            <button class="auth__toggle--login btn-toggle">Login</button>
+          </div>
+          <Register />
+        </div>
+      </section>
+    </body>
   );
 };
 

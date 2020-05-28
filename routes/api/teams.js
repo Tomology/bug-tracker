@@ -48,7 +48,7 @@ router.post(
         sendInvite(members);
       }
 
-      res.json({ team, profile });
+      res.json(team);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
@@ -102,8 +102,33 @@ router.post("/:team_id", auth, async (req, res) => {
       },
       { new: true }
     );
+    const creator = await User.findById(team.creator).select([
+      "firstName",
+      "lastName",
+    ]);
 
-    res.json(team);
+    const teamMembers = [];
+    const projects = [];
+
+    for (let i = 0; i < team.members.length; i++) {
+      const member = await User.findById(team.members[i]._id).select([
+        "firstName",
+        "lastName",
+      ]);
+
+      teamMembers.push(member);
+    }
+
+    for (let i = 0; i < team.projects.length; i++) {
+      const project = await Project.findById(team.projects[i]._id).select([
+        "projectName",
+        "key",
+      ]);
+
+      projects.push(project);
+    }
+
+    res.json({ team, creator, teamMembers, projects });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -220,10 +245,9 @@ router.get("/", auth, async (req, res) => {
     const teams = [];
 
     for (let i = 0; i < profile.teams.length; i++) {
-      const team = await Team.findById(profile.teams[i]).select([
-        "teamName",
-        "creator",
-      ]);
+      const team = await Team.findById(profile.teams[i])
+        .select(["teamName", "creator", "members"])
+        .populate("creator", ["firstName", "lastName"]);
       teams.push(team);
     }
 
@@ -253,7 +277,33 @@ router.get("/:team_id", auth, async (req, res) => {
         .json({ msg: "You can't access a team of which you aren't a member." });
     }
 
-    res.json(team);
+    const creator = await User.findById(team.creator).select([
+      "firstName",
+      "lastName",
+    ]);
+
+    const teamMembers = [];
+    const projects = [];
+
+    for (let i = 0; i < team.members.length; i++) {
+      const member = await User.findById(team.members[i]._id).select([
+        "firstName",
+        "lastName",
+      ]);
+
+      teamMembers.push(member);
+    }
+
+    for (let i = 0; i < team.projects.length; i++) {
+      const project = await Project.findById(team.projects[i]._id).select([
+        "projectName",
+        "key",
+      ]);
+
+      projects.push(project);
+    }
+
+    res.json({ team, creator, teamMembers, projects });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

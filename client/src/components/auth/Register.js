@@ -35,64 +35,76 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
   return (
     <Fragment>
-      <p className="lead">Create Your Account</p>
-      <form onSubmit={(e) => onSubmit(e)} className="form">
-        <div className="form-group">
-          <label className="form-text">Email *</label>
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={(e) => onChange(e)}
-          />
-        </div>
-        <div className="form-name-group">
-          <div>
-            <label className="form-text">First name *</label>
-            <input
-              type="text"
-              name="firstName"
-              value={firstName}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <div></div>
-          <div>
-            <label className="form-text">Last name *</label>
-            <input
-              type="text"
-              name="lastName"
-              value={lastName}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="form-text">Password *</label>
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={(e) => onChange(e)}
-          />
-        </div>
-        <div className="form-group">
-          <label className="form-text">Confirm Password *</label>
-          <input
-            type="password"
-            name="password2"
-            value={password2}
-            onChange={(e) => onChange(e)}
-          />
-        </div>
-        <div className="form-group">
-          <input type="submit" value="Register" className="btn btn-primary" />
-        </div>
-        <div className="form-group">
-          <p>
-            Already have an account? <Link to="/login">Sign In</Link>
-          </p>
-        </div>
+      <form onSubmit={(e) => onSubmit(e)} className="auth__register">
+        <p className="auth__register--lead heading__secondary">
+          Create Your Account
+        </p>
+        <label className="auth__register--email">
+          Email <span class="u-warning-text">*</span>
+        </label>
+        <input
+          className="auth__register--email form__input"
+          type="email"
+          name="email"
+          value={email}
+          onChange={(e) => onChange(e)}
+        />
+        <span class="form__validation">Please include a valid e-mail</span>
+
+        <label className="auth__register--firstName">
+          First name <span class="u-warning-text">*</span>
+        </label>
+        <input
+          className="auth__register--firstName form__input"
+          type="text"
+          name="firstName"
+          value={firstName}
+          onChange={(e) => onChange(e)}
+        />
+
+        <label className="auth__register--lastName">
+          Last name <span class="u-warning-text">*</span>
+        </label>
+        <input
+          className="auth__register--lastName form__input"
+          type="text"
+          name="lastName"
+          value={lastName}
+          onChange={(e) => onChange(e)}
+        />
+        <span class="form__validation">Name is required</span>
+
+        <label className="auth__register--password">
+          Password <span class="u-warning-text">*</span>
+        </label>
+        <input
+          className="auth__register--password form__input"
+          type="password"
+          name="password"
+          value={password}
+          onChange={(e) => onChange(e)}
+        />
+        <span class="form__validation">
+          Please enter a password with 6 or more characters
+        </span>
+
+        <label className="auth__register--password">
+          Confirm Password <span class="u-warning-text">*</span>
+        </label>
+        <input
+          className="auth__register--password form__input"
+          type="password"
+          name="password2"
+          value={password2}
+          onChange={(e) => onChange(e)}
+        />
+        <span class="form__validation">Please confirm your password</span>
+
+        <input
+          type="submit"
+          value="REGISTER"
+          className="auth__register--submit btn btn-green u-margin-top-small"
+        />
       </form>
     </Fragment>
   );

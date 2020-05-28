@@ -4,6 +4,7 @@ import auth from "./auth";
 import profile from "./profile";
 import project from "./project";
 import team from "./team";
+import people from "./people";
 
 export default combineReducers({
   alert,
@@ -11,4 +12,5 @@ export default combineReducers({
   profile,
   project,
   team,
+  people,
 });
