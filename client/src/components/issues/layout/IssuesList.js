@@ -3,7 +3,13 @@ import IssueItem from "./IssueItem";
 import Select from "react-select";
 import { filterStyles } from "../../../utils/reactSelectStyles";
 
-function IssuesList({ issues, projectKey, setSelectedIssue, searchTerm }) {
+function IssuesList({
+  issues,
+  projectKey,
+  selectedIssue,
+  setSelectedIssue,
+  searchTerm,
+}) {
   const [issueFilters, setIssueFilters] = useState("All");
 
   const filterOptions = [
@@ -52,6 +58,7 @@ function IssuesList({ issues, projectKey, setSelectedIssue, searchTerm }) {
       issue={issue}
       projectKey={projectKey}
       key={issue._id}
+      selectedIssue={selectedIssue}
       setSelectedIssue={setSelectedIssue}
     />
   ));

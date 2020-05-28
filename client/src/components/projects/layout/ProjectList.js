@@ -44,12 +44,14 @@ function ProjectList({ projects, searchTerm }) {
 
   return (
     <table className="projects__list">
-      <tr className="projects__list--headings">
-        <th>Name</th>
-        <th>Key</th>
-        <th>Lead</th>
-      </tr>
-      {projectsFiltered}
+      <tbody>
+        <tr className="projects__list--headings">
+          <th>Name</th>
+          <th>Key</th>
+          <th>Lead</th>
+        </tr>
+        {projectsFiltered}
+      </tbody>
     </table>
   );
 }

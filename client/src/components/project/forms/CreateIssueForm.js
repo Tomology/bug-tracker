@@ -23,7 +23,14 @@ function CreateIssueForm({
     dueDate: "",
   });
 
-  const { issueName, summary, description, dueDate } = formData;
+  const {
+    issueName,
+    issueType,
+    priority,
+    summary,
+    description,
+    dueDate,
+  } = formData;
 
   const assigneeOptions = [];
 
@@ -172,6 +179,13 @@ function CreateIssueForm({
             <button
               className="btn btn-green btn-form popup__form--create"
               type="submit"
+              disabled={
+                issueName.length === 0 ||
+                issueType.length === 0 ||
+                priority.length === 0 ||
+                summary.length === 0 ||
+                description.length === 0
+              }
             >
               Submit
             </button>

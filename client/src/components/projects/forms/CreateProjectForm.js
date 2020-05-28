@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import { createProject } from "../../../actions/project";
 import { customStyles } from "../../../utils/reactSelectStyles";
 
@@ -10,6 +11,7 @@ function CreateProjectForm({
   teams,
   createProjectToggle,
   createProject,
+  history,
 }) {
   const [formData, setFormData] = useState({
     projectName: "",
@@ -45,7 +47,7 @@ function CreateProjectForm({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    createProject(formData);
+    createProject(formData, history);
   };
 
   return (
@@ -141,4 +143,4 @@ CreateProjectForm.propTypes = {
   createProject: PropTypes.func.isRequired,
 };
 
-export default connect(null, { createProject })(CreateProjectForm);
+export default connect(null, { createProject })(withRouter(CreateProjectForm));

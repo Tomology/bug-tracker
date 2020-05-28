@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 
-function IssueItem({ issue, projectKey, setSelectedIssue }) {
+function IssueItem({ issue, projectKey, selectedIssue, setSelectedIssue }) {
+  const bgColor = (id) => {
+    if (selectedIssue._id === id) {
+      return "blue";
+    }
+    return "";
+  };
+
   return (
     <a
       className="project__side--issuesList-item"
-      onClick={() =>
+      style={{ backgroundColor: bgColor(issue._id) }}
+      onClick={() => {
         setSelectedIssue({
           _id: issue._id,
           progress: issue.progress,
@@ -20,8 +28,8 @@ function IssueItem({ issue, projectKey, setSelectedIssue }) {
           name: issue.name,
           user: issue.user,
           dueDate: issue.dueDate,
-        })
-      }
+        });
+      }}
     >
       <span>
         {issue.issueName} {`${projectKey}-${issue.issueNumber}`}

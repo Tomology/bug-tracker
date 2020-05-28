@@ -38,7 +38,7 @@ export const getProjects = () => async (dispatch) => {
 };
 
 // Create a project
-export const createProject = (formData) => async (dispatch) => {
+export const createProject = (formData, history) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -51,6 +51,8 @@ export const createProject = (formData) => async (dispatch) => {
       type: CREATE_PROJECT,
       payload: res.data,
     });
+
+    history.push(`/projects/${res.data._id}`);
 
     dispatch(setAlert("Project Created"));
   } catch (err) {

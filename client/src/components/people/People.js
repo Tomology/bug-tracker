@@ -97,7 +97,11 @@ const People = ({
               searchTerm={searchTerm}
               addPeopleToggle={addPeopleToggle}
             />
-            <TeamList teams={teams} searchTerm={searchTerm} />
+            <TeamList
+              teams={teams}
+              searchTerm={searchTerm}
+              createTeamToggle={createTeamToggle}
+            />
           </section>
         </main>
       )}
