@@ -1,7 +1,7 @@
 import React from "react";
 import TeamItem from "./TeamItem";
 
-function TeamList({ teams, searchTerm }) {
+function TeamList({ teams, searchTerm, createTeamToggle }) {
   const teamsFiltered = teams
     .filter((team) => {
       if (searchTerm === "") {
@@ -20,7 +20,10 @@ function TeamList({ teams, searchTerm }) {
       <div className="people__teams--list">
         <div href="#" className="people__teams--teamItem">
           <div className="people__teams--teamItem-teamAvatar"></div>
-          <button className="btn btn-grey people__people--peopleItem-button">
+          <button
+            className="btn btn-grey people__people--peopleItem-button"
+            onClick={() => createTeamToggle(true)}
+          >
             Start a Team
           </button>
         </div>

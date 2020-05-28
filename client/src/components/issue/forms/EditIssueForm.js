@@ -187,6 +187,13 @@ export const EditIssueForm = ({
             <button
               type="submit"
               className="btn btn-green btn-form popup__form--create"
+              disabled={
+                issueName.length === 0 ||
+                issueType.length === 0 ||
+                priority.length === 0 ||
+                summary.length === 0 ||
+                description.length === 0
+              }
             >
               Submit
             </button>

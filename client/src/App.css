@@ -590,7 +590,7 @@ input:checked + .slider:before {
   height: 8rem;
   width: 100%;
   display: block;
-  background-color: orangered;
+  background-image: linear-gradient(to bottom left, #777, #eee);
   margin-bottom: 1rem;
 }
 .people__teams--teamItem-teamCreator {
@@ -741,6 +741,21 @@ input:checked + .slider:before {
   grid-column: 1 / 2;
   grid-row: 1 / 2;
 }
+.project__top--projectUrl {
+  display: flex;
+  margin-top: 1rem;
+}
+.project__top--projectUrl svg {
+  width: 1.75rem;
+  color: #000;
+}
+.project__top--projectUrl a,
+.project__top--projectUrl a:visited {
+  text-decoration: none;
+  color: #000;
+  margin-left: 1rem;
+  font-size: 1.4rem;
+}
 .project__top--navLinks {
   font-size: 1.4rem;
   color: #777;
@@ -784,7 +799,6 @@ input:checked + .slider:before {
   min-height: 20rem;
   display: flex;
   flex-direction: column;
-  overflow: auto;
 }
 .project__side--issuesList select {
   margin-bottom: 1rem;
@@ -1312,6 +1326,9 @@ input:checked + .slider:before {
 }
 .u-text-warning {
   color: red !important;
+}
+.u-selected-background {
+  background-color: blue !important;
 }
 .u-col-full {
   grid-column: 1 / -1 !important;

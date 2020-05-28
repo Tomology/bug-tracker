@@ -32,11 +32,12 @@ router.post(
       const profile = await Profile.findOne({ user: req.user.id });
       const user = await User.findById(req.user.id);
 
-      const { projectName, key, sharedWith } = req.body;
+      const { projectName, key, url, sharedWith } = req.body;
 
       const newProject = new Project({
         projectName: projectName,
         key: key,
+        url: url,
         user: req.user.id,
         name: `${user.firstName} ${user.lastName}`,
         sharedWith: sharedWith,
@@ -95,12 +96,13 @@ router.post("/:project_id", auth, async (req, res) => {
         .json({ msg: "You can't edit a project you didn't create. " });
     }
 
-    const { projectName, key, sharedWith } = req.body;
+    const { projectName, key, url, sharedWith } = req.body;
 
     // Create update object
     const updateFields = {};
     if (projectName) updateFields.projectName = projectName;
     if (key) updateFields.key = key;
+    if (url) updateFields.url = url;
     if (sharedWith) {
       const currentSharees = project.sharedWith.map((sharee) =>
         sharee._id.toString()
@@ -383,7 +385,10 @@ router.post(
       const newIssue = {
         issueType: issueType,
         issueName: issueName,
-        issueNumber: project.issues.length + 1,
+        issueNumber:
+          project.issues.length === 0
+            ? project.issues.length + 1
+            : project.issues[0].issueNumber + 1,
         summary: summary,
         description: description,
         priority: priority,
@@ -479,10 +484,7 @@ router.post(
         .indexOf(req.params.issue_id);
 
       // Check if user is project creator and/or issue creator
-      if (
-        req.user.id !== project.user.toString() ||
-        req.user.id !== project.issues[issueIndex].user.toString()
-      ) {
+      if (req.user.id !== project.issues[issueIndex].user.toString()) {
         return res.status(401).json({ msg: "Unauthorized to edit issue" });
       }
 

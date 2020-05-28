@@ -11,15 +11,17 @@ function EditProjectForm({
 }) {
   const [formData, setFormData] = useState({
     projectName: "",
+    url: "",
     key: "",
   });
 
-  const { projectName, key } = formData;
+  const { projectName, url, key } = formData;
 
   useEffect(() => {
     setFormData({
       projectName: !project.projectName ? "" : project.projectName,
       key: !project.key ? "" : project.key,
+      url: !project.url ? "" : project.url,
     });
   }, []);
 
@@ -65,6 +67,15 @@ function EditProjectForm({
             id="key"
             className="form__input"
             value={key}
+            onChange={(e) => onChange(e)}
+          />
+          <label htmlFor="url">Project URL</label>
+          <input
+            type="text"
+            name="url"
+            id="url"
+            value={url}
+            className="form__input"
             onChange={(e) => onChange(e)}
           />
           <div className="popup__form--buttons">

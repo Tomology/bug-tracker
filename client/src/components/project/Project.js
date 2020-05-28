@@ -45,7 +45,7 @@ function Project({
 
   let issueIndex;
 
- /* {
+  /* {
     project &&
       (issueIndex = project.issues
         .map((issue) => issue._id)
@@ -71,12 +71,12 @@ function Project({
             params={match.params.project_id}
             setSearchTerm={setSearchTerm}
           />
-          {console.log()}
           <ProjectSide
             project={project}
             people={people}
             teams={teams}
             params={match.params.project_id}
+            selectedIssue={selectedIssue}
             setSelectedIssue={setSelectedIssue}
             searchTerm={searchTerm}
           />

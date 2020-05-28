@@ -12,6 +12,7 @@ function ProjectSide({
   people,
   teams,
   params,
+  selectedIssue,
   setSelectedIssue,
   searchTerm,
 }) {
@@ -26,6 +27,7 @@ function ProjectSide({
     <div className="project__side">
       <Issues
         project={project}
+        selectedIssue={selectedIssue}
         setSelectedIssue={setSelectedIssue}
         searchTerm={searchTerm}
       />

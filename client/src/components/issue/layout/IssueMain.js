@@ -8,6 +8,7 @@ function IssueMain({
     _id,
     issueName,
     issueType,
+    issueNumber,
     summary,
     description,
     date,
@@ -22,7 +23,9 @@ function IssueMain({
   return (
     <div className="issue__main">
       <h2 className="issue__main--issueName">{issueName}</h2>
-      <span className="issue__main--key">Project key - #</span>
+      <span className="issue__main--key">
+        {project.key}-{issueNumber}
+      </span>
       <span className="issue__main--dateCreated">
         Created on <Moment format="DD MMMM YYYY">{date}</Moment>
       </span>

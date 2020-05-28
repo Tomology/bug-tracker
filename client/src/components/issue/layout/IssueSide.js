@@ -47,7 +47,7 @@ function IssueSide({ selectedIssue, setSelectedIssue, params, project }) {
             Change Status
           </button>
           {progress.name && (
-            <p class="issue__side--status-info">
+            <p className="issue__side--status-info">
               Status last changed by{" "}
               <Link to={`/people/${progress.user}`}>{progress.name}</Link> on{" "}
               <Moment format="DD MMMM YYYY, h:mm:ss a">{progress.date}</Moment>.
@@ -110,38 +110,44 @@ function IssueSide({ selectedIssue, setSelectedIssue, params, project }) {
           <span>No due date</span>
         )}
       </div>
-      {isCreator && (
-        <div className="issue__side--buttons">
-          <button
-            className="btn btn-grey issue__side--buttons-button"
-            onClick={() => displayEditIssueToggle(true)}
-          >
-            Edit Issue
-          </button>
-          {displayEditIssue && (
-            <EditIssueForm
-              selectedIssue={selectedIssue}
-              displayEditIssueToggle={displayEditIssueToggle}
-              project={project}
-              params={params}
-            />
-          )}
-          <button
-            className="btn btn-grey issue__side--buttons-button"
-            onClick={() => displayDeleteIssueToggle(true)}
-          >
-            Delete Issue
-          </button>
-          {displayDeleteIssue && (
-            <DeleteIssueConfirm
-              params={params}
-              selectedIssue={selectedIssue}
-              setSelectedIssue={setSelectedIssue}
-              displayDeleteIssueToggle={displayDeleteIssueToggle}
-            />
-          )}
-        </div>
-      )}
+      <div className="issue__side--buttons">
+        {user === localStorage.getItem("currentUserId") && (
+          <Fragment>
+            <button
+              className="btn btn-grey issue__side--buttons-button"
+              onClick={() => displayEditIssueToggle(true)}
+            >
+              Edit Issue
+            </button>
+            {displayEditIssue && (
+              <EditIssueForm
+                selectedIssue={selectedIssue}
+                displayEditIssueToggle={displayEditIssueToggle}
+                project={project}
+                params={params}
+              />
+            )}
+          </Fragment>
+        )}
+        {isCreator && (
+          <Fragment>
+            <button
+              className="btn btn-grey issue__side--buttons-button"
+              onClick={() => displayDeleteIssueToggle(true)}
+            >
+              Delete Issue
+            </button>
+            {displayDeleteIssue && (
+              <DeleteIssueConfirm
+                params={params}
+                selectedIssue={selectedIssue}
+                setSelectedIssue={setSelectedIssue}
+                displayDeleteIssueToggle={displayDeleteIssueToggle}
+              />
+            )}
+          </Fragment>
+        )}
+      </div>
     </div>
   );
 }
