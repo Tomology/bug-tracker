@@ -471,7 +471,7 @@ router.delete("/:user_id/remove", auth, async (req, res) => {
     // Remove current user from contact's people
     const removeIndexRU = removeUserProfile.people
       .map((person) => person._id)
-      .indexOf(req.params.user_id);
+      .indexOf(req.user.id);
 
     removeUserProfile.people.splice(removeIndexRU, 1);
 

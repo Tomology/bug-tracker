@@ -20,12 +20,21 @@ const TeamInviteItem = ({ request, params, respondFriendRequest }) => {
         has invited you to join their team:{" "}
         <a href="#">{`${request.teamName}`}</a>
       </span>
-      <button className="btn btn-green" onClick={() => acceptRequest()}>
-        Accept
-      </button>
-      <button className="btn btn-grey" onClick={() => declineRequest()}>
-        Decline
-      </button>
+
+      <div className="profile__receivedRequests--buttons">
+        <button
+          className="btn btn-green profile__receivedRequests--buttons-button"
+          onClick={() => acceptRequest()}
+        >
+          Accept
+        </button>
+        <button
+          className="btn btn-grey profile__receivedRequests--buttons-button"
+          onClick={() => declineRequest()}
+        >
+          Decline
+        </button>
+      </div>
     </div>
   );
 };

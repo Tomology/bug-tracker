@@ -25,7 +25,13 @@ function PendingRequests({ receivedRequests, params }) {
         Note: accepting a team invite automatically adds all members to your
         contacts.
       </span>
-      <div className="profile__receivedRequests--requests">{requestArray}</div>
+      <div className="profile__receivedRequests--requests">
+        {requestArray.length > 0 ? (
+          requestArray
+        ) : (
+          <span className="noItems">You have no pending requests...</span>
+        )}
+      </div>
     </div>
   );
 }

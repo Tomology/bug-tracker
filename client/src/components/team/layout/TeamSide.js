@@ -20,7 +20,7 @@ function TeamSide({
   const [leaveTeam, leaveTeamToggle] = useState(false);
 
   const isTeamCreator = creator._id === localStorage.getItem("currentUserId");
-
+  console.log(team);
   const teamMembers = members.map((member) => (
     <div className="team__members--list-memberItem" key={member._id}>
       <Link to="#">
@@ -34,7 +34,11 @@ function TeamSide({
           <span className="team__members--list-memberItem-name">
             {`${member.firstName} ${member.lastName}`}
           </span>
-          <span className="team__members--list-memberItem-status">Invited</span>
+          {member.status === "Invited" && (
+            <span className="team__members--list-memberItem-status">
+              {member.status}
+            </span>
+          )}
         </div>
       </Link>
       {isTeamCreator && (

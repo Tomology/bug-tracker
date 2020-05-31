@@ -18,12 +18,20 @@ function FriendRequestItem({ request, params, respondFriendRequest }) {
         <a href="#">{`${request.user.firstName} ${request.user.lastName}`}</a>{" "}
         would like to add you to their contacts:
       </span>
-      <button className="btn btn-green" onClick={() => acceptRequest()}>
-        Accept
-      </button>
-      <button className="btn btn-grey" onClick={() => declineRequest()}>
-        Decline
-      </button>
+      <div className="profile__receivedRequests--buttons">
+        <button
+          className="btn btn-green profile__receivedRequests--buttons-button"
+          onClick={() => acceptRequest()}
+        >
+          Accept
+        </button>
+        <button
+          className="btn btn-grey profile__receivedRequests--buttons-button"
+          onClick={() => declineRequest()}
+        >
+          Decline
+        </button>
+      </div>
     </div>
   );
 }

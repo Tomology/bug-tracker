@@ -405,7 +405,7 @@ input:checked + .slider:before {
       rgba(247, 247, 247, 0.6),
       rgba(255, 250, 250, 0.6)
     ),
-    url("img/backgroundFinal.png");
+    url("/img/backgroundFinal.png");
   background-position: center;
   background-size: cover;
   display: grid;
@@ -614,6 +614,23 @@ input:checked + .slider:before {
   padding: 5rem 15rem;
   height: 100vh;
 }
+@media (max-width: 56.25em) {
+  .profile {
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+  }
+}
+@media (max-width: 75em) {
+  .profile {
+    padding: 5rem 7.5rem;
+  }
+}
+@media (max-width: 37.5em) {
+  .profile {
+    padding: 1rem 1rem;
+  }
+}
 .profile a {
   text-decoration: none;
   color: inherit;
@@ -626,6 +643,13 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
   padding: 2rem 3rem;
+}
+@media (max-width: 56.25em) {
+  .profile__about {
+    border: none;
+    align-items: center;
+    margin-bottom: 5rem;
+  }
 }
 .profile__about--header {
   align-self: center;
@@ -666,56 +690,127 @@ input:checked + .slider:before {
   margin-bottom: 0.5rem;
   padding: 1rem 2rem;
 }
+@media (max-width: 56.25em) {
+  .profile__about--buttons {
+    margin-top: 1rem;
+    width: 50%;
+  }
+}
 .profile__main {
   grid-row: 1 / -1;
   grid-column: 2 / -1;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 5rem;
+  grid-template-rows: min-content min-content;
+  grid-column-gap: 5rem;
+}
+.profile__main .noItems {
+  margin-left: 0.5rem;
+  color: #777;
 }
 .profile__receivedRequests {
   grid-column: 1 / -1;
+  margin-bottom: 5rem;
+}
+.profile__receivedRequests .infoText {
+  color: #777;
+  font-size: 1.3rem;
 }
 .profile__receivedRequests--requests {
   border: 3px solid #eee;
   border-radius: 4px;
-  padding: 1rem 1rem;
+  padding: 0.25rem;
 }
 .profile__receivedRequests--requests-person,
 .profile__receivedRequests--requests-team {
   transition: all 0.2s;
-  border: 1px solid #eee;
-  padding-left: 1rem;
+  padding: 0.5rem;
   margin-top: 1px;
   border-radius: 4px;
+  display: flex;
 }
 .profile__receivedRequests--requests-person:hover,
 .profile__receivedRequests--requests-team:hover {
   background-color: #eee;
 }
+@media (max-width: 75em) {
+  .profile__receivedRequests--requests-person,
+  .profile__receivedRequests--requests-team {
+    font-size: 1.4rem;
+  }
+}
+.profile__receivedRequests--requests-person span,
+.profile__receivedRequests--requests-team span {
+  margin-right: 2rem;
+}
+.profile__receivedRequests--buttons {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: 1rem;
+  min-width: 15rem;
+  display: flex;
+  align-items: center;
+}
+.profile__receivedRequests--buttons-button {
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+.profile__receivedRequests--buttons-button:last-child {
+  margin-left: 0.5rem;
+}
 .profile__yourProjects {
   grid-column: 1 / 2;
+}
+@media (max-width: 75em) {
+  .profile__yourProjects {
+    grid-column: 1 / -1;
+    margin-bottom: 5rem;
+  }
 }
 .profile__yourProjects--projects {
   border: 3px solid #eee;
   border-radius: 4px;
-  padding: 1rem 1rem;
+  padding: 0.25rem;
 }
 .profile__yourProjects--projects-projectItem {
   transition: all 0.2s;
-  border: 1px solid #eee;
-  padding-left: 1rem;
+  padding: 0.5rem;
   margin-top: 1px;
   border-radius: 4px;
 }
 .profile__yourProjects--projects-projectItem:hover {
   background-color: #eee;
 }
+.profile__yourTeams {
+  grid-column: 2 / -1;
+}
+@media (max-width: 75em) {
+  .profile__yourTeams {
+    grid-column: 1 / -1;
+  }
+}
 .profile__yourTeams--teams {
   border: 3px solid #eee;
   border-radius: 4px;
   padding: 1rem 1rem;
-  grid-column: 2 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+}
+@media (max-width: 75em) {
+  .profile__yourTeams--teams {
+    grid-template-columns: repeat(3, minmax(min-content, 33.3333%));
+  }
+}
+@media (max-width: 56.25em) {
+  .profile__yourTeams--teams {
+    grid-template-columns: repeat(4, minmax(min-content, 25%));
+  }
+}
+@media (max-width: 37.5em) {
+  .profile__yourTeams--teams {
+    grid-template-columns: repeat(2, minmax(min-content, 50%));
+  }
 }
 .profile__yourTeams--teams-teamItem {
   transition: all 0.2s;
