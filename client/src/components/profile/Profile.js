@@ -63,24 +63,34 @@ const Profile = ({
             <div className="profile__yourProjects">
               <h3>Projects You've Created</h3>
               <div className="profile__yourProjects--projects">
-                {projects &&
-                  projects.length > 0 &&
+                {projects && projects.length > 0 ? (
                   projects
-                    .filter((project) => project.user === match.params.user_id)
+                    .filter(
+                      (project) => project.user._id === match.params.user_id
+                    )
                     .map((project) => (
                       <ProjectItem key={project._id} project={project} />
-                    ))}
+                    ))
+                ) : (
+                  <span className="noItems">
+                    You haven't created any projects...
+                  </span>
+                )}
               </div>
             </div>
 
             <div className="profile__yourTeams">
               <h3>Teams You've Created</h3>
               <div className="profile__yourTeams--teams">
-                {teams &&
-                  teams.length > 0 &&
+                {teams && teams.length > 0 ? (
                   teams
-                    .filter((team) => team.creator === match.params.user_id)
-                    .map((team) => <TeamItem key={team._id} team={team} />)}
+                    .filter((team) => team.creator._id === match.params.user_id)
+                    .map((team) => <TeamItem key={team._id} team={team} />)
+                ) : (
+                  <span className="noItems">
+                    You haven't created any teams...
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -93,16 +103,14 @@ const Profile = ({
       <section className="profile">
         <div className="profile__about">
           <ProfileAboutHeader profile={profile} />
-          <div className="profileSide">
-            <div className="profileAbout">
-              <ProfileAboutReadOnly
-                profile={profile}
-                params={match.params.user_id}
-                teams={teams}
-              />
-            </div>
-          </div>
+
+          <ProfileAboutReadOnly
+            profile={profile}
+            params={match.params.user_id}
+            teams={teams}
+          />
         </div>
+
         <div className="profile__main">
           <div className="profile__yourProjects">
             <h3>Projects You've Collaborated On</h3>

@@ -116,7 +116,14 @@ router.post("/:team_id", auth, async (req, res) => {
         "lastName",
       ]);
 
-      teamMembers.push(member);
+      const memberObj = {
+        _id: member._id,
+        firstName: member.firstName,
+        lastName: member.lastName,
+        status: team.members[i].status,
+      };
+
+      teamMembers.push(memberObj);
     }
 
     for (let i = 0; i < team.projects.length; i++) {
@@ -291,7 +298,13 @@ router.get("/:team_id", auth, async (req, res) => {
         "lastName",
       ]);
 
-      teamMembers.push(member);
+      const memberObj = {
+        _id: member._id,
+        firstName: member.firstName,
+        lastName: member.lastName,
+        status: team.members[i].status,
+      };
+      teamMembers.push(memberObj);
     }
 
     for (let i = 0; i < team.projects.length; i++) {

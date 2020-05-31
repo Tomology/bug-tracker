@@ -99,6 +99,8 @@ export const editTeam = (formData, teamId) => async (dispatch) => {
       payload: res.data,
     });
 
+    console.log(res.data);
+
     if (formData.members) {
       dispatch(setAlert("Invites Sent Out"));
     } else {

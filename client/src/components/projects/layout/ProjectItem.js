@@ -5,7 +5,7 @@ const ProjectItem = ({ project }) => {
   return (
     <div class="profile__yourProjects--projects-projectItem">
       <span>
-        <Link to="#!">{project.projectName}</Link>
+        <Link to={`/projects/${project._id}`}>{project.projectName}</Link>
       </span>
     </div>
   );
