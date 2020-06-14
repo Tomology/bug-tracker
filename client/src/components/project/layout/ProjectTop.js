@@ -34,7 +34,7 @@ function ProjectTop({ project, params, setSearchTerm }) {
             ></path>
           </svg>
           <a href={project.url} target="_blank">
-            {project.url}
+            Link to {project.projectName}
           </a>
         </div>
       )}
