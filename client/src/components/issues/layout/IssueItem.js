@@ -3,7 +3,7 @@ import React, { useState } from "react";
 function IssueItem({ issue, projectKey, selectedIssue, setSelectedIssue }) {
   const bgColor = (id) => {
     if (selectedIssue._id === id) {
-      return "blue";
+      return "#55c57a";
     }
     return "";
   };
@@ -32,7 +32,7 @@ function IssueItem({ issue, projectKey, selectedIssue, setSelectedIssue }) {
       }}
     >
       <span>
-        {issue.issueName} {`${projectKey}-${issue.issueNumber}`}
+        {`${projectKey}-${issue.issueNumber}`}: {issue.issueName}
       </span>
     </a>
   );

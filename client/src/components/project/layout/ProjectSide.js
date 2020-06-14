@@ -35,7 +35,7 @@ function ProjectSide({
         <Fragment>
           <div className="project__side--button-special">
             <button
-              className="btn btn-green project__side--button"
+              className="btn btn-green share"
               onClick={() => shareProjectToggle(true)}
             >
               Share Project
