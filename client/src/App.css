@@ -38,6 +38,11 @@ body::-webkit-scrollbar-track {
 body::-webkit-scrollbar-thumb {
   background: #eee;
 }
+.mainBody {
+  width: 100vw;
+  margin-left: auto;
+  transition: all 0.3s;
+}
 body {
   font-family: "Cabin", sans-serif;
   font-weight: 400;
@@ -67,6 +72,31 @@ body {
   text-transform: uppercase;
   font-size: 6rem;
   margin-bottom: 6rem;
+}
+.alert {
+  position: fixed;
+  right: 10rem;
+  bottom: 10rem;
+  border: 1px solid #777;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0.1rem 0.1rem 1rem #55c57a;
+}
+.alert_close {
+  position: absolute;
+  right: 1rem;
+  top: 0;
+  font-size: 2.5rem;
+  color: #777;
+}
+.alert_close:hover {
+  color: #eee;
+  cursor: pointer;
+}
+.alert_message {
+  font-size: 1.75rem;
+  padding: 1rem;
+  color: #777;
 }
 .login-selected .auth__register {
   left: -50rem;
@@ -351,10 +381,15 @@ body {
 .btn-animated {
   transition: all 0.2s;
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.2);
-  font-weight: 600;
-  letter-spacing: 0.3rem;
-  padding: 2rem 4rem;
+  letter-spacing: 2px;
   border-radius: 10rem;
+  color: #000;
+  transition: all 0.2s;
+  background-image: linear-gradient(
+    to right bottom,
+    rgba(40, 180, 133, 0.6),
+    rgba(126, 213, 111, 0.6)
+  );
 }
 .btn-animated:hover {
   transform: translateY(-3px);
@@ -408,6 +443,66 @@ body {
 }
 .btn-grey:hover {
   background-color: #eee;
+}
+.dashboard {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 3rem;
+  grid-auto-flow: dense;
+}
+.dashboard__heading {
+  font-size: 2.2rem;
+  margin-bottom: 2.5rem;
+  grid-column: 1 / -1;
+}
+.dashboard__welcome {
+  margin-bottom: 5rem;
+  grid-column: 1 / -1;
+}
+.dashboard__subheading--requests {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  grid-column: 1 / -1;
+}
+.dashboard__subheading--issues {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  grid-column: 1 / 2;
+}
+.dashboard__subheading--workedOn {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  grid-column: 2 / -1;
+}
+.dashboard__requests {
+  border: 2px solid #eee;
+  border-radius: 4px;
+  padding: 1rem;
+  grid-column: 1 / -1;
+  margin-bottom: 5rem;
+}
+.dashboard__requests a {
+  color: #000;
+  text-decoration: none;
+}
+.dashboard__requests a:hover {
+  text-decoration: underline;
+}
+.dashboard__issues {
+  border: 2px solid #eee;
+  border-radius: 4px;
+  grid-column: 1 / 2;
+  padding: 1rem;
+}
+.dashboard__workedOn {
+  border: 2px solid #eee;
+  border-radius: 4px;
+  grid-column: 2 / -1;
+  padding: 1rem;
 }
 .deleteWarning__content {
   background-color: #fff;
@@ -628,39 +723,148 @@ body {
   align-self: center;
   transform: translateY(7rem) translateX(7rem);
 }
+.toggle__checkbox {
+  display: none;
+}
+.toggle__button {
+  z-index: 9999;
+  background-color: #f7f7f7;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 5rem;
+  position: fixed;
+  transform: translateX(2.5rem);
+  top: 2rem;
+  box-shadow: 1rem 3rem 3rem rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+  text-align: center;
+  border: 2px solid #55c57a;
+  cursor: pointer;
+}
+.toggle__button:hover .toggle__button--icon::before {
+  top: -0.9rem;
+}
+.toggle__button:hover .toggle__button--icon::after {
+  top: 0.9rem;
+}
+.toggle__button--icon {
+  position: relative;
+  margin-top: 2.25rem;
+}
+.toggle__button--icon,
+.toggle__button--icon::before,
+.toggle__button--icon::after {
+  width: 2.25rem;
+  height: 2px;
+  background-color: #777;
+  display: inline-block;
+}
+.toggle__button--icon::before,
+.toggle__button--icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  transition: all 0.2s;
+}
+.toggle__button--icon::before {
+  top: -0.7rem;
+}
+.toggle__button--icon::after {
+  top: 0.7rem;
+}
 .navigation {
+  background-color: #55c57a;
   width: 5rem;
   height: 100vh;
   position: fixed;
-  background-color: #55c57a;
+  top: 0;
+  left: 0;
+  z-index: 8888;
+  transition: width 0.3s;
+  overflow: hidden;
 }
-.navigation__nav {
-  height: 100%;
+@media (max-width: 37.5em) {
+  .navigation {
+    left: -5rem;
+  }
 }
 .navigation__list {
-  height: 100%;
   list-style: none;
+  margin-top: 10rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  text-align: center;
 }
 .navigation__item {
-  width: 100%;
+  width: 18rem;
 }
 .navigation__item:last-child {
   margin-top: auto;
+  margin-bottom: 10rem;
 }
 .navigation__link:link,
 .navigation__link:visited {
-  display: flex;
-  align-items: center;
-  height: 5rem;
   text-decoration: none;
-  margin-left: 3rem;
+  color: #eee;
+  display: flex;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  padding-left: 2.5rem;
+  background-image: linear-gradient(
+    120deg,
+    transparent 0%,
+    transparent 50%,
+    #fff 50%
+  );
+  background-size: 260%;
+  transition: all 0.4s;
 }
-.navigation__link:link svg,
-.navigation__link:visited svg {
-  width: 3rem;
+.navigation__link:link:hover,
+.navigation__link:link:active,
+.navigation__link:visited:hover,
+.navigation__link:visited:active {
+  background-position: 100%;
+  color: #55c57a;
+}
+.navigation__link--text {
+  margin-left: 2rem;
+}
+.navigation__link svg {
+  height: 2.5rem;
+  width: 2.5rem;
+  transform: translateX(-50%);
+}
+.toggle__checkbox:checked ~ .toggle__button {
+  transform: translateX(15.5rem);
+}
+.toggle__checkbox:checked ~ .navigation {
+  width: 18rem;
+}
+@media (max-width: 37.5em) {
+  .toggle__checkbox:checked ~ .navigation {
+    left: 0rem;
+  }
+}
+.toggle__checkbox:checked + .toggle__button .toggle__button--icon {
+  background-color: transparent;
+}
+.toggle__checkbox:checked + .toggle__button .toggle__button--icon::before {
+  top: 0;
+  transform: rotate(135deg);
+}
+.toggle__checkbox:checked + .toggle__button .toggle__button--icon::after {
+  top: 0;
+  transform: rotate(-135deg);
+}
+.toggle__checkbox:checked ~ .mainBody {
+  width: calc(100vw - 18rem);
+  margin-left: auto;
+}
+@media (max-width: 37.5em) {
+  .toggle__checkbox:checked ~ .mainBody {
+    width: 100vw;
+  }
 }
 .people {
   min-height: 100vh;
@@ -1060,7 +1264,7 @@ body {
   grid-template-columns: 1fr 3fr;
   grid-template-rows: min-content min-content min-content;
   grid-column-gap: 5rem;
-  width: 90%;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
   margin-top: 2.5rem;

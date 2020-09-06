@@ -24,6 +24,13 @@ export const setAlert = (msg, alertType, timeout = 10000) => (dispatch) => {
   );
 };
 
+export const closeAlert = (id) => (dispatch) => {
+  dispatch({
+    type: REMOVE_ALERT,
+    payload: id,
+  });
+};
+
 export const refreshAlert = () => (dispatch) => {
   dispatch({
     type: REFRESH_ALERT,

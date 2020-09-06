@@ -38,6 +38,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     if (e.target.name === "password2" && invalidPassword2 === true) {
       setInvalidPassword2(false);
     }
+
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 

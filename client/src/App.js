@@ -12,7 +12,6 @@ import Team from "./components/team/Team";
 import Projects from "./components/projects/Projects";
 import Project from "./components/project/Project";
 import PrivateRoute from "./components/routing/PrivateRoute";
-
 import "./App.css";
 // Redux
 import { Provider } from "react-redux";
