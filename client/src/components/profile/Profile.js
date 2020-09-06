@@ -39,119 +39,115 @@ const Profile = ({
 
   const ownProfile = (
     <Fragment>
-      <main className="mainBody">
-        <section className="profile">
-          <div className="profile__about">
-            <ProfileAboutHeader profile={profile} />
-            {isEditing ? (
-              <ProfileAboutEdit
-                setEditing={setEditing}
-                params={match.params.user_id}
-                profile={profile}
-                loading={loading}
-                getProfileById={getProfileById}
-              />
-            ) : (
-              <ProfileAboutReadOnly profile={profile} setEditing={setEditing} />
-            )}
-          </div>
-          <div className="profile__main">
-            <PendingRequests
-              receivedRequests={receivedRequests}
-              params={match.params.user_id}
-            />
-            <div className="profile__yourProjects">
-              <h3>Projects You've Created</h3>
-              <div className="profile__yourProjects--projects">
-                {projects && projects.length > 0 ? (
-                  projects
-                    .filter(
-                      (project) => project.user._id === match.params.user_id
-                    )
-                    .map((project) => (
-                      <ProjectItem key={project._id} project={project} />
-                    ))
-                ) : (
-                  <span className="noItems">
-                    You haven't created any projects...
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="profile__yourTeams">
-              <h3>Teams You've Created</h3>
-              <div className="profile__yourTeams--teams">
-                {teams && teams.length > 0 ? (
-                  teams
-                    .filter((team) => team.creator._id === match.params.user_id)
-                    .map((team) => <TeamItem key={team._id} team={team} />)
-                ) : (
-                  <span className="noItems">
-                    You haven't created any teams...
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </Fragment>
-  );
-  const otherProfile = (
-    <main className="mainBody">
       <section className="profile">
         <div className="profile__about">
           <ProfileAboutHeader profile={profile} />
-
-          <ProfileAboutReadOnly
-            profile={profile}
-            params={match.params.user_id}
-            teams={teams}
-          />
+          {isEditing ? (
+            <ProfileAboutEdit
+              setEditing={setEditing}
+              params={match.params.user_id}
+              profile={profile}
+              loading={loading}
+              getProfileById={getProfileById}
+            />
+          ) : (
+            <ProfileAboutReadOnly profile={profile} setEditing={setEditing} />
+          )}
         </div>
-
         <div className="profile__main">
+          <PendingRequests
+            receivedRequests={receivedRequests}
+            params={match.params.user_id}
+          />
           <div className="profile__yourProjects">
-            <h3>Projects You've Collaborated On</h3>
+            <h3>Projects You've Created</h3>
             <div className="profile__yourProjects--projects">
-              {projects &&
-                projects.length > 0 &&
+              {projects && projects.length > 0 ? (
                 projects
                   .filter(
-                    (project) =>
-                      project.user === match.params.user_id ||
-                      project.sharedWith
-                        .map((sharee) => sharee._id)
-                        .indexOf(match.params.user_id) !== -1
+                    (project) => project.user._id === match.params.user_id
                   )
                   .map((project) => (
                     <ProjectItem key={project._id} project={project} />
-                  ))}
+                  ))
+              ) : (
+                <span className="noItems">
+                  You haven't created any projects...
+                </span>
+              )}
             </div>
           </div>
+
           <div className="profile__yourTeams">
-            <h3>Your Mutual Teams</h3>
+            <h3>Teams You've Created</h3>
             <div className="profile__yourTeams--teams">
-              {teams &&
-                teams.length > 0 &&
+              {teams && teams.length > 0 ? (
                 teams
-                  .filter(
-                    (team) =>
-                      team.creator._id === match.params.user_id ||
-                      (team.members
-                        .map((member) => member._id)
-                        .indexOf(match.params.user_id) !== -1 &&
-                        team.members.map(
-                          (member) => member.status === "Accepted"
-                        ))
-                  )
-                  .map((team) => <TeamItem key={team._id} team={team} />)}
+                  .filter((team) => team.creator._id === match.params.user_id)
+                  .map((team) => <TeamItem key={team._id} team={team} />)
+              ) : (
+                <span className="noItems">
+                  You haven't created any teams...
+                </span>
+              )}
             </div>
           </div>
         </div>
       </section>
-    </main>
+    </Fragment>
+  );
+  const otherProfile = (
+    <section className="profile">
+      <div className="profile__about">
+        <ProfileAboutHeader profile={profile} />
+
+        <ProfileAboutReadOnly
+          profile={profile}
+          params={match.params.user_id}
+          teams={teams}
+        />
+      </div>
+
+      <div className="profile__main">
+        <div className="profile__yourProjects">
+          <h3>Projects You've Collaborated On</h3>
+          <div className="profile__yourProjects--projects">
+            {projects &&
+              projects.length > 0 &&
+              projects
+                .filter(
+                  (project) =>
+                    project.user === match.params.user_id ||
+                    project.sharedWith
+                      .map((sharee) => sharee._id)
+                      .indexOf(match.params.user_id) !== -1
+                )
+                .map((project) => (
+                  <ProjectItem key={project._id} project={project} />
+                ))}
+          </div>
+        </div>
+        <div className="profile__yourTeams">
+          <h3>Your Mutual Teams</h3>
+          <div className="profile__yourTeams--teams">
+            {teams &&
+              teams.length > 0 &&
+              teams
+                .filter(
+                  (team) =>
+                    team.creator._id === match.params.user_id ||
+                    (team.members
+                      .map((member) => member._id)
+                      .indexOf(match.params.user_id) !== -1 &&
+                      team.members.map(
+                        (member) => member.status === "Accepted"
+                      ))
+                )
+                .map((team) => <TeamItem key={team._id} team={team} />)}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 
   const currentUserProfile =
