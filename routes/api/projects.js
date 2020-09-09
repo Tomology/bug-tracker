@@ -647,4 +647,68 @@ router.delete(
   }
 );
 
+// @route       GET api/projects/issues/:user_id
+// @desc        Get all issues assigned to user
+// @access      Private
+router.get("/issues/:user_id", auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    const allProjectIds = [...profile.projects];
+
+    // Get all team projects ids
+    for (let i = 0; i < profile.teams.length; i++) {
+      const teamProjects = await Team.findById(profile.teams[i]._id);
+      teamProjects.projects.map((project) => allProjectIds.unshift(project));
+    }
+
+    // Get all projects and remove duplicates
+    const allProjects = [];
+    for (let i = 0; i < allProjectIds.length; i++) {
+      const project = await Project.findById(allProjectIds[i]).select([
+        "projectName",
+        "issues",
+      ]);
+
+      if (
+        allProjects
+          .map((item) => item._id.toString())
+          .indexOf(project._id.toString()) === -1
+      ) {
+        allProjects.unshift(project);
+      }
+    }
+
+    const outstandingIssues = [];
+    for (let i = 0; i < allProjects.length; i++) {
+      for (let j = 0; j < allProjects[i].issues.length; j++) {
+        if (
+          allProjects[i].issues[j].assignee !== null &&
+          allProjects[i].issues[j].progress.progress !== "Resolved"
+        ) {
+          for (let k = 0; k < allProjects[i].issues[j].assignee.length; k++) {
+            if (
+              allProjects[i].issues[j].assignee[k]._id.toString() ===
+              req.user.id
+            ) {
+              outstandingIssues.unshift({
+                projectName: allProjects[i].projectName,
+                projectId: allProjects[i]._id,
+                issueName: allProjects[i].issues[j].issueName,
+                progress: allProjects[i].issues[j].progress.progress,
+                dueDate: allProjects[i].issues[j].dueDate,
+              });
+            }
+          }
+        }
+      }
+    }
+
+    res.json(outstandingIssues);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
 module.exports = router;

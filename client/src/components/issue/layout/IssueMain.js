@@ -18,7 +18,6 @@ function IssueMain({
   setSelectedIssue,
   project,
   params,
-  refreshIssue,
 }) {
   return (
     <div className="issue__main">
@@ -48,7 +47,6 @@ function IssueMain({
         project={project}
         selectedIssue={selectedIssue}
         setSelectedIssue={setSelectedIssue}
-        refreshIssue={refreshIssue}
       />
     </div>
   );

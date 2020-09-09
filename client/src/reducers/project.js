@@ -1,6 +1,8 @@
 import {
   GET_PROJECTS,
   GET_PROJECTS_ERROR,
+  GET_OUTSTANDING_ISSUES,
+  GET_OUTSTANDING_ISSUES_ERROR,
   CREATE_PROJECT,
   PROJECT_ERROR,
   GET_PROJECT,
@@ -24,6 +26,7 @@ const initialState = {
   project: null,
   refreshIssue: null,
   loading: true,
+  outstandingIssues: null,
   error: {},
 };
 
@@ -118,6 +121,12 @@ export default function (state = initialState, action) {
         },
         loading: false,
       };
+    case GET_OUTSTANDING_ISSUES:
+      return {
+        ...state,
+        outstandingIssues: payload,
+        loading: false,
+      };
     case REFRESH_ALERT:
       return {
         ...state,
@@ -134,6 +143,7 @@ export default function (state = initialState, action) {
     case ISSUE_ERROR:
     case PROJECT_ERROR:
     case GET_PROJECTS_ERROR:
+    case GET_OUTSTANDING_ISSUES_ERROR:
       return {
         ...state,
         error: payload,

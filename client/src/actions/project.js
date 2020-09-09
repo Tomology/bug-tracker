@@ -4,6 +4,8 @@ import { setAlert, refreshAlert } from "./alert";
 import {
   GET_PROJECTS,
   GET_PROJECTS_ERROR,
+  GET_OUTSTANDING_ISSUES,
+  GET_OUTSTANDING_ISSUES_ERROR,
   CREATE_PROJECT,
   PROJECT_ERROR,
   GET_PROJECT,
@@ -238,6 +240,8 @@ export const updateStatus = (formData, projectId, issueId) => async (
       payload: res.data,
     });
 
+    dispatch(refreshAlert());
+
     dispatch(setAlert("Status Updated"));
   } catch (err) {
     dispatch({
@@ -265,6 +269,8 @@ export const editIssue = (formData, projectId, issueId) => async (dispatch) => {
       type: EDIT_ISSUE,
       payload: res.data,
     });
+
+    dispatch(refreshAlert());
 
     dispatch(setAlert("Issue Updated"));
   } catch (err) {
@@ -351,10 +357,29 @@ export const deleteComment = (projectId, issueId, commentId) => async (
       payload: { comments: res.data, issue: issueId },
     });
 
+    dispatch(refreshAlert());
+
     dispatch(setAlert("Comment Removed"));
   } catch (err) {
     dispatch({
       type: COMMENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// Get current user's oustanding issues
+export const getOutstandingIssues = (userId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/projects/issues/${userId}`);
+
+    dispatch({
+      type: GET_OUTSTANDING_ISSUES,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: GET_OUTSTANDING_ISSUES_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status },
     });
   }

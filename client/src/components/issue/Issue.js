@@ -2,13 +2,7 @@ import React, { Fragment, useEffect } from "react";
 import IssueSide from "./layout/IssueSide";
 import IssueMain from "./layout/IssueMain";
 
-function Issue({
-  project,
-  selectedIssue,
-  setSelectedIssue,
-  params,
-  refreshIssue,
-}) {
+function Issue({ project, selectedIssue, setSelectedIssue, params }) {
   return (
     <Fragment>
       {selectedIssue._id !== "" && (
@@ -18,7 +12,6 @@ function Issue({
             setSelectedIssue={setSelectedIssue}
             project={project}
             params={params}
-            refreshIssue={refreshIssue}
           />
           <IssueSide
             selectedIssue={selectedIssue}

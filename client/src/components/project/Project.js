@@ -19,12 +19,6 @@ function Project({
   people: { people },
   team: { teams },
 }) {
-  useEffect(() => {
-    getProjectById(match.params.project_id);
-    getPeople();
-    getTeams();
-  }, [getProjectById, match.params.project_id, getPeople, getTeams]);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedIssue, setSelectedIssue] = useState({
     _id: "",
@@ -43,22 +37,53 @@ function Project({
     dueDate: "",
   });
 
-  let issueIndex;
-
-  /* {
-    project &&
-      (issueIndex = project.issues
+  useEffect(() => {
+    getProjectById(match.params.project_id);
+    getPeople();
+    getTeams();
+    console.log("Non conditional use effec is executed");
+    if (selectedIssue._id !== "") {
+      let issueIndex = project.issues
         .map((issue) => issue._id)
-        .indexOf(selectedIssue._id));
-  }
-  {
-    refreshIssue &&
+        .indexOf(selectedIssue._id);
+      console.log(project.issues[issueIndex]);
       setSelectedIssue({
         ...selectedIssue,
         comments: project.issues[issueIndex].comments,
+        progress: project.issues[issueIndex].progress,
+        issueName: project.issues[issueIndex].issueName,
+        issueType: project.issues[issueIndex].issueType,
+        priority: project.issues[issueIndex].priority,
+        summary: project.issues[issueIndex].summary,
+        description: project.issues[issueIndex].description,
+        assignee: project.issues[issueIndex].assignee,
+        dueDate: project.issues[issueIndex].dueDate,
       });
-  }
-*/
+      console.log("Conditional statement executed", project);
+    }
+  }, [
+    getProjectById,
+    match.params.project_id,
+    getPeople,
+    getTeams,
+    refreshIssue,
+  ]);
+
+  let issueIndex;
+
+  // {
+  //   project &&
+  //     (issueIndex = project.issues
+  //       .map((issue) => issue._id)
+  //       .indexOf(selectedIssue._id));
+  // }
+  // {
+  //   refreshIssue &&
+  //     setSelectedIssue({
+  //       ...selectedIssue,
+  //       comments: project.issues[issueIndex].comments,
+  //     });
+  // }
 
   return (
     <Fragment>
@@ -86,7 +111,6 @@ function Project({
               setSelectedIssue={setSelectedIssue}
               params={match.params.project_id}
               project={project}
-              refreshIssue={refreshIssue}
             />
           </div>
         </section>

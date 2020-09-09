@@ -15,7 +15,6 @@ function IssueComments({
   selectedIssue,
   setSelectedIssue,
   deleteComment,
-  refreshIssue,
 }) {
   const commentsJSX = comments.map((comment) => (
     <div

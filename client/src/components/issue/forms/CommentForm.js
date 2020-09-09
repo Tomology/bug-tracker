@@ -16,8 +16,6 @@ const CommentForm = ({
     text: "",
   });
 
-
-
   const onChange = (e) => {
     setCommentText({
       ...commentText,
@@ -54,4 +52,6 @@ CommentForm.propTypes = {
   addComment: PropTypes.func.isRequired,
 };
 
-export default connect(null, { addComment })(CommentForm);
+export default connect(null, {
+  addComment,
+})(CommentForm);
