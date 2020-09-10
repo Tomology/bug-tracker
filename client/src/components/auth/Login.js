@@ -18,7 +18,7 @@ const Login = ({ login, isAuthenticated }) => {
       setInvalidEmail(false);
     }
     if (e.target.name === "password" && invalidPassword === true) {
-      setInvalidPassword(true);
+      setInvalidPassword(false);
     }
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -38,6 +38,7 @@ const Login = ({ login, isAuthenticated }) => {
 
     if (!password) {
       setInvalidPassword(true);
+      return;
     }
 
     login(email, password);
@@ -69,7 +70,7 @@ const Login = ({ login, isAuthenticated }) => {
       />
       {invalidEmail && (
         <span className="auth__login--email-validation form__validation">
-          Email is required
+          Please enter a valid email
         </span>
       )}
       <label className="auth__login--password-label">
@@ -81,16 +82,15 @@ const Login = ({ login, isAuthenticated }) => {
         value={password}
         className="auth__login--password-input form__input"
         onChange={(e) => onChange(e)}
-        minLength="6"
       />
       {invalidPassword && (
         <span className="auth__login--password-validation form__validation">
-          Password is required
+          Please enter your password
         </span>
       )}
-      <span className="auth__login--password-validation2 form__validation">
+      {/* <span className="auth__login--password-validation2 form__validation">
         Invalid credentials
-      </span>
+      </span> */}
 
       <input
         type="submit"

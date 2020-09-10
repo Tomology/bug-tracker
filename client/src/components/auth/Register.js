@@ -18,7 +18,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   const { email, firstName, lastName, password, password2 } = formData;
 
   const onChange = (e) => {
-    // Remove validation error when field is changed
+    // Remove validation error(s) when field is changed
     if (e.target.name === "email" && invalidEmail === true) {
       setInvalidEmail(false);
     }
@@ -31,12 +31,24 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
       setInvalidLastName(false);
     }
 
-    if (e.target.name === "password" && invalidPassword === true) {
+    if (
+      e.target.name === "password" &&
+      e.target.value.length >= 6 &&
+      invalidPassword === true
+    ) {
       setInvalidPassword(false);
     }
 
     if (e.target.name === "password2" && invalidPassword2 === true) {
       setInvalidPassword2(false);
+    }
+
+    if (
+      e.target.name === "password2" &&
+      passwordMatch === true &&
+      password === password2
+    ) {
+      setPasswordMatch(false);
     }
 
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -83,11 +95,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
       setPasswordMatch(true);
     }
 
-    /*if (password !== password2) {
-      setAlert("Passwords do not match", "danger");
-    } else {
-      register({ firstName, lastName, email, password });
-    } */
+    register({ firstName, lastName, email, password });
   };
 
   // Redirect if logged in
@@ -117,7 +125,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
       {invalidEmail && (
         <span className="auth__register--email-validation">
-          Please include a valid e-mail
+          Please use a valid e-mail
         </span>
       )}
 
