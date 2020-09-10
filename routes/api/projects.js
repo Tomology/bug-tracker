@@ -689,22 +689,34 @@ router.get("/issues/:user_id", auth, async (req, res) => {
           for (let k = 0; k < allProjects[i].issues[j].assignee.length; k++) {
             if (
               allProjects[i].issues[j].assignee[k]._id.toString() ===
-              req.user.id
+                req.user.id ||
+              profile.teams.filter(
+                (team) =>
+                  team._id.toString() ===
+                  allProjects[i].issues[j].assignee[k]._id.toString()
+              ).length > 0
             ) {
-              outstandingIssues.unshift({
-                projectName: allProjects[i].projectName,
-                projectId: allProjects[i]._id,
-                issueName: allProjects[i].issues[j].issueName,
-                progress: allProjects[i].issues[j].progress.progress,
-                dueDate: allProjects[i].issues[j].dueDate,
-              });
+              if (
+                outstandingIssues
+                  .map((issue) => issue.issueId.toString())
+                  .indexOf(allProjects[i].issues[j]._id.toString()) === -1
+              ) {
+                outstandingIssues.unshift({
+                  projectName: allProjects[i].projectName,
+                  projectId: allProjects[i]._id,
+                  issueId: allProjects[i].issues[j]._id,
+                  issueName: allProjects[i].issues[j].issueName,
+                  progress: allProjects[i].issues[j].progress.progress,
+                  dueDate: allProjects[i].issues[j].dueDate,
+                });
+              }
             }
           }
         }
       }
     }
 
-    res.json(outstandingIssues);
+    res.json(outstandingIssues.sort((a, b) => a.dueDate - b.dueDate));
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
