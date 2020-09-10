@@ -88,6 +88,7 @@ function EditProjectForm({
             <button
               type="submit"
               class="btn btn-green btn-form popup__form--create"
+              disabled={projectName.length === 0 || key.length === 0}
             >
               Save Changes
             </button>
