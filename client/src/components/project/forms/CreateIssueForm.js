@@ -72,6 +72,8 @@ function CreateIssueForm({
     createIssue(formData, params);
   };
 
+  const todaysDate = new Date().toISOString().split("T")[0];
+
   return (
     <div className="popup">
       <div className="popup__content">
@@ -168,6 +170,7 @@ function CreateIssueForm({
             className="form__input"
             value={dueDate}
             onChange={(e) => onChange(e)}
+            min={todaysDate}
           />
           <div class="popup__form--buttons">
             <button

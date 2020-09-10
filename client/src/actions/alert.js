@@ -36,5 +36,5 @@ export const refreshAlert = () => (dispatch) => {
     type: REFRESH_ALERT,
   });
 
-  setTimeout(() => dispatch({ type: REFRESH_REMOVE }), 3000);
+  setTimeout(() => dispatch({ type: REFRESH_REMOVE }), 10);
 };
