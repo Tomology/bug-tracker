@@ -39,6 +39,7 @@ function ChangeStatusForm({
   const handleUpdate = (e) => {
     e.preventDefault();
     updateStatus(formData, params, selectedIssue._id);
+    displayChangeStatusToggle(false);
   };
   return (
     <div className="popup">

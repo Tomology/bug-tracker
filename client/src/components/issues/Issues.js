@@ -3,6 +3,7 @@ import IssuesList from "./layout/IssuesList";
 
 function Issues({
   project: { issues, key },
+  teams,
   selectedIssue,
   setSelectedIssue,
   searchTerm,
@@ -15,6 +16,7 @@ function Issues({
         selectedIssue={selectedIssue}
         setSelectedIssue={setSelectedIssue}
         searchTerm={searchTerm}
+        teams={teams}
       />
     </Fragment>
   );

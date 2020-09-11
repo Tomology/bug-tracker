@@ -12,12 +12,6 @@ export const EditIssueForm = ({
   editIssue,
   params,
 }) => {
-  const assigneeArray = selectedIssue.assignee.map((assign) => ({
-    _id: assign._id,
-    name: assign.name,
-    value: assign.name,
-    label: assign.name,
-  }));
   const [formData, setFormData] = useState({
     issueType: selectedIssue.issueType,
     issueName: selectedIssue.issueName,
@@ -25,7 +19,14 @@ export const EditIssueForm = ({
     description: selectedIssue.description,
     priority: `${selectedIssue.priority}`,
     dueDate: !selectedIssue.dueDate ? "" : selectedIssue.dueDate.slice(0, 10),
-    assignee: !selectedIssue.assignee ? "" : assigneeArray,
+    assignee: !selectedIssue.assignee
+      ? ""
+      : selectedIssue.assignee.map((assign) => ({
+          _id: assign._id,
+          name: assign.name,
+          value: assign.name,
+          label: assign.name,
+        })),
   });
 
   const {
@@ -76,12 +77,13 @@ export const EditIssueForm = ({
   const onSubmit = (e) => {
     e.preventDefault();
     editIssue(formData, params, selectedIssue._id);
+    displayEditIssueToggle(false);
   };
 
   return (
     <div className="popup">
       <div className="popup__content">
-        <h3>Create Issue</h3>
+        <h3>Edit Issue</h3>
         <div
           className="popup__close"
           onClick={() => displayEditIssueToggle(false)}

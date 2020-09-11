@@ -29,7 +29,12 @@ function DeleteAccountConfirm({
   return (
     <div className="popup">
       <div className="deleteWarning__content">
-        <div className="popup__close">&times;</div>
+        <div
+          className="popup__close"
+          onClick={() => toggleConfirmDelete(false)}
+        >
+          &times;
+        </div>
         <span className="deleteWarning__message">
           Are you sure you want to delete your account? <br />
           You will permenantly lose all your contacts, teams and projects.

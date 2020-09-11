@@ -295,7 +295,7 @@ export const deleteIssue = (projectId, issueId) => async (dispatch) => {
       payload: issueId,
     });
 
-    // history.push(`/projects/${projectId}`);
+    dispatch(refreshAlert());
 
     dispatch(setAlert("Issue Deleted"));
   } catch (err) {

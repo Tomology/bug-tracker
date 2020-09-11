@@ -70,6 +70,7 @@ function CreateIssueForm({
   const onSubmit = (e) => {
     e.preventDefault();
     createIssue(formData, params);
+    displayCreateIssueToggle(false);
   };
 
   const todaysDate = new Date().toISOString().split("T")[0];

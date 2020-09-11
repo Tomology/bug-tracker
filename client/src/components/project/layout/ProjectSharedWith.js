@@ -11,7 +11,7 @@ function ProjectSharedWith({
 }) {
   const sharedWith = project.sharedWith.map((sharee) => (
     <div className="sharedWith__item" key={sharee._id}>
-      <span>{sharee.name}</span>
+      <span className="name">{sharee.name}</span>
       <span
         className="remove"
         onClick={() => unshareProject(params, sharee._id)}

@@ -30,6 +30,7 @@ function ProjectSide({
         selectedIssue={selectedIssue}
         setSelectedIssue={setSelectedIssue}
         searchTerm={searchTerm}
+        teams={teams}
       />
       {isCreator ? (
         <Fragment>

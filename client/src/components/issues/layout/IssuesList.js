@@ -9,8 +9,11 @@ function IssuesList({
   selectedIssue,
   setSelectedIssue,
   searchTerm,
+  teams,
 }) {
   const [issueFilters, setIssueFilters] = useState("All");
+
+  const teamIds = teams.map((team) => team._id.toString());
 
   const filterOptions = [
     { value: "All", label: "All" },
@@ -18,7 +21,6 @@ function IssuesList({
     { value: "Assigned To Me", label: "Assigned To Me" },
     { value: "Resolved", label: "Resolved" },
   ];
-
   const issuesList = issues.filter((issue) => {
     if (issueFilters === "All") {
       return issue;
@@ -27,12 +29,16 @@ function IssuesList({
         return issue;
       }
     } else if (issueFilters === "Assigned To Me") {
-      if (
-        issue.assignee
-          .map((assign) => assign._id.toString())
-          .indexOf(localStorage.getItem("currentUserId")) !== -1
-      ) {
-        return issue;
+      if (issue.assignee) {
+        if (
+          issue.assignee
+            .map((assign) => assign._id.toString())
+            .indexOf(localStorage.getItem("currentUserId")) !== -1 ||
+          issue.assignee.filter((assign) => teamIds.indexOf(assign._id) !== -1)
+            .length > 0
+        ) {
+          return issue;
+        }
       }
     } else if (issueFilters === "Resolved") {
       if (issue.progress.progress === "Resolved") {

@@ -39,6 +39,7 @@ function ShareProjectForm({
   const onSubmit = (e) => {
     e.preventDefault();
     editProject(formData, params);
+    shareProjectToggle(false);
   };
 
   return (

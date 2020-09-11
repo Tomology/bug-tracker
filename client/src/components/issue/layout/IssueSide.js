@@ -34,6 +34,8 @@ function IssueSide({ selectedIssue, setSelectedIssue, params, project }) {
     project.user === localStorage.getItem("currentUserId") ||
     user === localStorage.getItem("currentUserId");
 
+  console.log(progress);
+
   return (
     <div className="issue__side">
       <div className="issue__side--status">
@@ -66,11 +68,7 @@ function IssueSide({ selectedIssue, setSelectedIssue, params, project }) {
         <span className="issue__side--heading">Assignee(s)</span>
         {assignee ? (
           assignee.map((assignee) => (
-            <Link
-              key={assignee._id}
-              to={`/people/${assignee._id}`}
-              className="issue__side--assignee-item"
-            >
+            <div key={assignee._id} className="issue__side--assignee-item">
               <Avatar
                 round={true}
                 name={assignee.name}
@@ -78,7 +76,7 @@ function IssueSide({ selectedIssue, setSelectedIssue, params, project }) {
                 className="avatar"
               ></Avatar>
               <div className="name">{assignee.name}</div>
-            </Link>
+            </div>
           ))
         ) : (
           <div>Unassigned</div>

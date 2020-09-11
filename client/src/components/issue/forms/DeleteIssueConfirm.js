@@ -13,7 +13,12 @@ function DeleteIssueConfirm({
   return (
     <div className="popup">
       <div className="deleteWarning__content">
-        <div className="popup__close">&times;</div>
+        <div
+          className="popup__close"
+          onClick={() => displayDeleteIssueToggle(false)}
+        >
+          &times;
+        </div>
         <span className="deleteWarning__message">
           Are you sure you want to permanently delete this issue? <br />
           This action is irreversible!

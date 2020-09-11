@@ -35,11 +35,12 @@ function EditProjectForm({
   const onSubmit = (e) => {
     e.preventDefault();
     editProject(formData, params);
+    editProjectFormToggle(false);
   };
   return (
     <div className="popup">
       <div className="popup__content">
-        <h3>Create Project</h3>
+        <h3>Edit Project</h3>
         <div
           className="popup__close"
           onClick={() => editProjectFormToggle(false)}
