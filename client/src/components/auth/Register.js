@@ -2,10 +2,17 @@ import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import { setAlert } from "../../actions/alert";
-import { register } from "../../actions/auth";
+import { register, removeValidationErrorAlert } from "../../actions/auth";
 import PropTypes from "prop-types";
+import UserExists from "./validationAlerts/UserExists";
 
-const Register = ({ setAlert, register, isAuthenticated }) => {
+const Register = ({
+  setAlert,
+  register,
+  isAuthenticated,
+  validationError,
+  removeValidationErrorAlert,
+}) => {
   // Form Data State, Destructuring and Event Handling
   const [formData, setFormData] = useState({
     email: "",
@@ -19,6 +26,10 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
   const onChange = (e) => {
     // Remove validation error(s) when field is changed
+    if (e.target.name === "email" && validationError.length > 0) {
+      removeValidationErrorAlert();
+    }
+
     if (e.target.name === "email" && invalidEmail === true) {
       setInvalidEmail(false);
     }
@@ -122,6 +133,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         value={email}
         onChange={(e) => onChange(e)}
       />
+      <UserExists />
 
       {invalidEmail && (
         <span className="auth__register--email-validation">
@@ -209,10 +221,16 @@ Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  validationError: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  validationError: state.auth.validationError,
 });
 
-export default connect(mapStateToProps, { setAlert, register })(Register);
+export default connect(mapStateToProps, {
+  setAlert,
+  register,
+  removeValidationErrorAlert,
+})(Register);

@@ -2,9 +2,15 @@ import React, { Fragment, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { login } from "../../actions/auth";
+import { login, removeValidationErrorAlert } from "../../actions/auth";
+import InvalidCredentials from "./validationAlerts/InvalidCredentials";
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = ({
+  login,
+  isAuthenticated,
+  validationError,
+  removeValidationErrorAlert,
+}) => {
   // Form Data State, Destructuring and Event Handling
   const [formData, setFormData] = useState({
     email: "",
@@ -14,6 +20,10 @@ const Login = ({ login, isAuthenticated }) => {
   const { email, password } = formData;
 
   const onChange = (e) => {
+    if (validationError.length > 0) {
+      removeValidationErrorAlert();
+    }
+
     if (e.target.name === "email" && invalidEmail === true) {
       setInvalidEmail(false);
     }
@@ -88,10 +98,7 @@ const Login = ({ login, isAuthenticated }) => {
           Please enter your password
         </span>
       )}
-      {/* <span className="auth__login--password-validation2 form__validation">
-        Invalid credentials
-      </span> */}
-
+      <InvalidCredentials />
       <input
         type="submit"
         value="Log In"
@@ -104,10 +111,15 @@ const Login = ({ login, isAuthenticated }) => {
 Login.propTypes = {
   login: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  validationError: PropTypes.array.isRequired,
+  removeValidationErrorAlert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  validationError: state.auth.validationError,
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, removeValidationErrorAlert })(
+  Login
+);

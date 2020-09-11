@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setAlert } from "./alert";
+import { v4 as uuidv4 } from "uuid";
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -9,6 +9,8 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_PROFILE,
+  VALIDATION_ERROR_ALERT,
+  REMOVE_VALIDATION_ERROR_ALERT,
 } from "./types";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -56,8 +58,10 @@ export const register = ({ firstName, lastName, email, password }) => async (
   } catch (err) {
     const errors = err.response.data.errors;
 
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    if (errors.length === 1) {
+      errors
+        .filter((error) => error.msg === "This e-mail is already in use")
+        .forEach((error) => dispatch(validationErrorAlert(error.msg)));
     }
     dispatch({
       type: REGISTER_FAIL,
@@ -87,13 +91,10 @@ export const login = (email, password) => async (dispatch) => {
   } catch (err) {
     const errors = err.response.data.errors;
 
-    if (errors) {
-      console.log(errors.length);
+    if (errors.length === 1) {
       errors
         .filter((error) => error.msg === "Invalid Credentials")
-        .forEach((error) => dispatch(setAlert(error.msg, "danger")));
-
-      //dispatch(setAlert(error.msg, "danger"))
+        .forEach((error) => dispatch(validationErrorAlert(error.msg)));
     }
     dispatch({
       type: LOGIN_FAIL,
@@ -105,4 +106,19 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: LOGOUT });
+};
+
+// Database validation error alert
+export const validationErrorAlert = (msg) => (dispatch) => {
+  dispatch({
+    type: VALIDATION_ERROR_ALERT,
+    payload: { msg },
+  });
+};
+
+// Remove validation error alert
+export const removeValidationErrorAlert = () => (dispatch) => {
+  dispatch({
+    type: REMOVE_VALIDATION_ERROR_ALERT,
+  });
 };
