@@ -37,8 +37,6 @@ const App = () => {
           <main className="mainBody">
             <Alert />
             <Switch>
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/login" component={Login} />
               <PrivateRoute exact path="/people" component={People} />
               <PrivateRoute exact path="/people/:user_id" component={Profile} />
               <PrivateRoute

@@ -1644,6 +1644,7 @@ body {
   display: flex;
   align-items: center;
   border-radius: 4px;
+  border: 1px solid #eee;
   margin-bottom: 0.5rem;
   transition: all 0.2s;
 }

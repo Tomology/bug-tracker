@@ -70,6 +70,10 @@ const ProjectSchema = new mongoose.Schema(
             ref: "user",
           },
           name: { type: String },
+          date: {
+            type: Date,
+            default: Date.now,
+          },
         },
         assignee: [
           {

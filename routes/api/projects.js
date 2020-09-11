@@ -433,6 +433,7 @@ router.post("/:project_id/issues/:issue_id", auth, async (req, res) => {
           "issues.$.progress.progress": `${progress}`,
           "issues.$.progress.user": `${req.user.id}`,
           "issues.$.progress.name": `${user.firstName} ${user.lastName}`,
+          "issues.$.progress.date": `${new Date()}`,
         },
       },
       { new: true }

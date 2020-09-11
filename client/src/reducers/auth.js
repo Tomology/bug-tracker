@@ -7,6 +7,8 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   ACCOUNT_DELETED,
+  VALIDATION_ERROR_ALERT,
+  REMOVE_VALIDATION_ERROR_ALERT,
 } from "../actions/types";
 
 const initialState = {
@@ -14,6 +16,7 @@ const initialState = {
   isAuthenticated: null,
   loading: true,
   user: null,
+  validationError: [],
 };
 
 export default function (state = initialState, action) {
@@ -26,6 +29,7 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         user: payload,
+        validationError: [],
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
@@ -35,6 +39,17 @@ export default function (state = initialState, action) {
         ...payload,
         isAuthenticated: true,
         loading: false,
+        validationError: [],
+      };
+    case VALIDATION_ERROR_ALERT:
+      return {
+        ...state,
+        validationError: [payload, ...state.validationError],
+      };
+    case REMOVE_VALIDATION_ERROR_ALERT:
+      return {
+        ...state,
+        validationError: [],
       };
     case LOGOUT:
     case ACCOUNT_DELETED:

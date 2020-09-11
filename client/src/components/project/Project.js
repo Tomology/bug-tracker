@@ -87,7 +87,7 @@ function Project({
 
   return (
     <Fragment>
-      {loading || !project ? (
+      {loading || !project || !teams ? (
         <Spinner />
       ) : (
         <section className="project">
