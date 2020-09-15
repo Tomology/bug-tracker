@@ -26,7 +26,7 @@ const Dashboard = ({
   ) : (
     <section className="dashboard">
       <h1 className="dashboard__heading">Dashboard</h1>
-      <span class="dashboard__welcome">
+      <span className="dashboard__welcome">
         Welcome {user.firstName} {user.lastName}.
       </span>
       <h2 className="dashboard__subheading--requests">Pending Requests</h2>
@@ -58,7 +58,6 @@ Dashboard.propTypes = {
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
   getProfileById: PropTypes.func.isRequired,
-  getProjects: PropTypes.func.isRequired,
 };
 
 const mapSateToProps = (state) => ({

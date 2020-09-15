@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import ProjectTop from "../project/layout/ProjectTop";
 import ProjectSide from "../project/layout/ProjectSide";
-import Issues from "../issues/Issues";
 import Issue from "../issue/Issue";
 import Spinner from "../layout/Spinner";
 import { connect } from "react-redux";
@@ -69,25 +68,9 @@ function Project({
     refreshIssue,
   ]);
 
-  let issueIndex;
-
-  // {
-  //   project &&
-  //     (issueIndex = project.issues
-  //       .map((issue) => issue._id)
-  //       .indexOf(selectedIssue._id));
-  // }
-  // {
-  //   refreshIssue &&
-  //     setSelectedIssue({
-  //       ...selectedIssue,
-  //       comments: project.issues[issueIndex].comments,
-  //     });
-  // }
-
   return (
     <Fragment>
-      {loading || !project || !teams ? (
+      {loading || !project || !teams || !people ? (
         <Spinner />
       ) : (
         <section className="project">

@@ -6,7 +6,7 @@ import {
   REFRESH_REMOVE,
 } from "./types";
 
-export const setAlert = (msg, alertType, timeout = 10000) => (dispatch) => {
+export const setAlert = (msg, alertType, timeout = 4000) => (dispatch) => {
   const id = uuidv4();
 
   dispatch({
@@ -38,4 +38,3 @@ export const refreshAlert = () => (dispatch) => {
 
   setTimeout(() => dispatch({ type: REFRESH_REMOVE }), 10);
 };
-

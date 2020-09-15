@@ -56,7 +56,7 @@ export const createProject = (formData, history) => async (dispatch) => {
 
     history.push(`/projects/${res.data._id}`);
 
-    dispatch(setAlert("Project Created"));
+    dispatch(setAlert("Project created"));
   } catch (err) {
     const errors = err.response.data.errors;
 
@@ -90,7 +90,7 @@ export const editProject = (formData, projectId) => async (dispatch) => {
     });
 
     if (formData.projectName || formData.projectKey) {
-      dispatch(setAlert("Project Updated"));
+      dispatch(setAlert("Project updated"));
     }
 
     if (formData.sharedWith) {
@@ -129,7 +129,7 @@ export const getProjectById = (projectId) => async (dispatch) => {
 // Unshare project with user/team
 export const unshareProject = (projectId, shareeId) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/projects/${projectId}/${shareeId}`);
+    await axios.delete(`/api/projects/${projectId}/${shareeId}`);
 
     dispatch({
       type: UNSHARE_PROJECT,
@@ -148,7 +148,7 @@ export const removeSharedProject = (projectId, shareeId, history) => async (
   dispatch
 ) => {
   try {
-    const res = await axios.delete(`/api/projects/${projectId}/${shareeId}`);
+    await axios.delete(`/api/projects/${projectId}/${shareeId}`);
 
     dispatch({
       type: UNSHARE_PROJECT,
@@ -168,7 +168,7 @@ export const removeSharedProject = (projectId, shareeId, history) => async (
 export const deleteProject = (projectId, history) => async (dispatch) => {
   try {
     await axios.delete(`/api/projects/${projectId}`);
-    dispatch(setAlert("Project Deleted"));
+    dispatch(setAlert("Project deleted"));
 
     history.push("/projects");
 
@@ -203,7 +203,7 @@ export const createIssue = (formData, projectId) => async (dispatch) => {
       payload: res.data,
     });
 
-    dispatch(setAlert("Issue Created"));
+    dispatch(setAlert("Issue created"));
   } catch (err) {
     const errors = err.response.data.errors;
 
@@ -242,7 +242,7 @@ export const updateStatus = (formData, projectId, issueId) => async (
 
     dispatch(refreshAlert());
 
-    dispatch(setAlert("Status Updated"));
+    dispatch(setAlert("Status updated"));
   } catch (err) {
     dispatch({
       type: ISSUE_ERROR,
@@ -272,7 +272,7 @@ export const editIssue = (formData, projectId, issueId) => async (dispatch) => {
 
     dispatch(refreshAlert());
 
-    dispatch(setAlert("Issue Updated"));
+    dispatch(setAlert("Issue updated"));
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -297,7 +297,7 @@ export const deleteIssue = (projectId, issueId) => async (dispatch) => {
 
     dispatch(refreshAlert());
 
-    dispatch(setAlert("Issue Deleted"));
+    dispatch(setAlert("Issue deleted"));
   } catch (err) {
     dispatch({
       type: ISSUE_ERROR,
@@ -329,8 +329,6 @@ export const addComment = (formData, projectId, issueId) => async (
     });
 
     dispatch(refreshAlert());
-
-    dispatch(setAlert("Comment Added"));
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -359,7 +357,7 @@ export const deleteComment = (projectId, issueId, commentId) => async (
 
     dispatch(refreshAlert());
 
-    dispatch(setAlert("Comment Removed"));
+    dispatch(setAlert("Comment removed"));
   } catch (err) {
     dispatch({
       type: COMMENT_ERROR,

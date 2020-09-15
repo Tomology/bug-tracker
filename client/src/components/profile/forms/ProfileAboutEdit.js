@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { editProfile } from "../../../actions/profile";
@@ -22,7 +22,6 @@ const ProfileAboutEdit = ({
 
   useEffect(() => {
     if (!profile) getProfileById(params);
-
     setFormData({
       jobTitle: loading || !profile.jobTitle ? "" : profile.jobTitle,
       department: loading || !profile.department ? "" : profile.department,
@@ -30,7 +29,16 @@ const ProfileAboutEdit = ({
         loading || !profile.organization ? "" : profile.organization,
       location: loading || !profile.location ? "" : profile.location,
     });
-  }, [loading]);
+  }, [
+    profile,
+    params,
+    getProfileById,
+    loading,
+    profile.jobTitle,
+    profile.department,
+    profile.organization,
+    profile.location,
+  ]);
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,7 +58,7 @@ const ProfileAboutEdit = ({
             focusable="false"
             data-prefix="fas"
             data-icon="briefcase"
-            class="svg-inline--fa fa-briefcase fa-w-16"
+            className="svg-inline--fa fa-briefcase fa-w-16"
             role="img"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
@@ -75,7 +83,7 @@ const ProfileAboutEdit = ({
             focusable="false"
             data-prefix="fas"
             data-icon="project-diagram"
-            class="svg-inline--fa fa-project-diagram fa-w-20"
+            className="svg-inline--fa fa-project-diagram fa-w-20"
             role="img"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 640 512"
@@ -100,7 +108,7 @@ const ProfileAboutEdit = ({
             focusable="false"
             data-prefix="fas"
             data-icon="building"
-            class="svg-inline--fa fa-building fa-w-14"
+            className="svg-inline--fa fa-building fa-w-14"
             role="img"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 448 512"
@@ -125,7 +133,7 @@ const ProfileAboutEdit = ({
             focusable="false"
             data-prefix="fas"
             data-icon="globe-americas"
-            class="svg-inline--fa fa-globe-americas fa-w-16"
+            className="svg-inline--fa fa-globe-americas fa-w-16"
             role="img"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 496 512"
@@ -150,7 +158,7 @@ const ProfileAboutEdit = ({
             focusable="false"
             data-prefix="fas"
             data-icon="envelope"
-            class="svg-inline--fa fa-envelope fa-w-16"
+            className="svg-inline--fa fa-envelope fa-w-16"
             role="img"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
@@ -164,7 +172,10 @@ const ProfileAboutEdit = ({
         </div>
       </div>
       <div className="profile__about--buttons">
-        <button type="submit" class="btn btn-green profile__about--buttons-btn">
+        <button
+          type="submit"
+          className="btn btn-green profile__about--buttons-btn"
+        >
           Save Changes
         </button>
         <button

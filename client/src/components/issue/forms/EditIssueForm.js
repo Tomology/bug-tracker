@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Select from "react-select";
@@ -8,7 +8,7 @@ import { customStyles } from "../../../utils/reactSelectStyles";
 export const EditIssueForm = ({
   selectedIssue,
   displayEditIssueToggle,
-  project: { sharedWith, loading, user, name },
+  project: { sharedWith, user, name },
   editIssue,
   params,
 }) => {

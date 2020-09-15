@@ -9,7 +9,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const authLinks = (
     <Fragment>
       <input type="checkbox" className="toggle__checkbox" id="navi-toggle" />
-      <label for="navi-toggle" className="toggle__button">
+      <label htmlFor="navi-toggle" className="toggle__button">
         <span className="toggle__button--icon">&nbsp;</span>
       </label>
       <nav className="navigation">
@@ -95,7 +95,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
             </Link>
           </li>
           <li className="navigation__item">
-            <Link className="navigation__link" onClick={() => logout()}>
+            <a href="" className="navigation__link" onClick={() => logout()}>
               <svg
                 aria-hidden="true"
                 focusable="false"
@@ -112,7 +112,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
                 ></path>
               </svg>
               <span className="navigation__link--text">Logout</span>
-            </Link>
+            </a>
           </li>
         </ul>
       </nav>

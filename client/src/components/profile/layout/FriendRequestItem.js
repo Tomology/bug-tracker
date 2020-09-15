@@ -15,8 +15,8 @@ function FriendRequestItem({ request, params, respondFriendRequest }) {
   return (
     <div className="profile__receivedRequests--requests-person">
       <span>
-        <a href="#">{`${request.user.firstName} ${request.user.lastName}`}</a>{" "}
-        would like to add you to their contacts:
+        {`${request.user.firstName} ${request.user.lastName}`} would like to add
+        you as a contact.
       </span>
       <div className="profile__receivedRequests--buttons">
         <button

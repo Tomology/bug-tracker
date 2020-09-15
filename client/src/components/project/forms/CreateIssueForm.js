@@ -173,7 +173,7 @@ function CreateIssueForm({
             onChange={(e) => onChange(e)}
             min={todaysDate}
           />
-          <div class="popup__form--buttons">
+          <div className="popup__form--buttons">
             <button
               className="btn btn-cancel btn-form popup__form--cancel"
               onClick={() => displayCreateIssueToggle(false)}

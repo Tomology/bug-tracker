@@ -1,13 +1,11 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
-import { setAlert } from "../../actions/alert";
+import { Redirect } from "react-router-dom";
 import { register, removeValidationErrorAlert } from "../../actions/auth";
 import PropTypes from "prop-types";
 import UserExists from "./validationAlerts/UserExists";
 
 const Register = ({
-  setAlert,
   register,
   isAuthenticated,
   validationError,
@@ -62,6 +60,7 @@ const Register = ({
       setPasswordMatch(false);
     }
 
+    // Set the form data
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -107,6 +106,10 @@ const Register = ({
     }
 
     register({ firstName, lastName, email, password });
+
+    if (validationError.length === 0) {
+      document.getElementById("REGISTER").value = "REGISTERING...";
+    }
   };
 
   // Redirect if logged in
@@ -124,7 +127,7 @@ const Register = ({
         Create Your Account
       </p>
       <label className="auth__register--email-label">
-        Email <span className="u-warning-text">*</span>
+        Email <span className="u-text-warning">*</span>
       </label>
       <input
         className="auth__register--email-input form__input"
@@ -142,7 +145,7 @@ const Register = ({
       )}
 
       <label className="auth__register--firstName-label">
-        First name <span className="u-warning-text">*</span>
+        First name <span className="u-text-warning">*</span>
       </label>
       <input
         className="auth__register--firstName-input form__input"
@@ -157,7 +160,7 @@ const Register = ({
         </span>
       )}
       <label className="auth__register--lastName-label">
-        Last name <span className="u-warning-text">*</span>
+        Last name <span className="u-text-warning">*</span>
       </label>
       <input
         className="auth__register--lastName-input form__input"
@@ -173,7 +176,7 @@ const Register = ({
       )}
 
       <label className="auth__register--password-label">
-        Password <span className="u-warning-text">*</span>
+        Password <span className="u-text-warning">*</span>
       </label>
       <input
         className="auth__register--password-input form__input"
@@ -189,7 +192,7 @@ const Register = ({
       )}
 
       <label className="auth__register--password2-label">
-        Confirm Password <span className="u-warning-text">*</span>
+        Confirm Password <span className="u-text-warning">*</span>
       </label>
       <input
         className="auth__register--password2-input form__input"
@@ -209,19 +212,20 @@ const Register = ({
         </span>
       )}
       <input
+        id="REGISTER"
         type="submit"
         value="REGISTER"
-        className="auth__register--submit btn btn-green u-margin-top-small"
+        className="auth__register--submit btn btn-auth u-margin-top-small"
       />
     </form>
   );
 };
 
 Register.propTypes = {
-  setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   validationError: PropTypes.array.isRequired,
+  removeValidationErrorAlert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -230,7 +234,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  setAlert,
   register,
   removeValidationErrorAlert,
 })(Register);

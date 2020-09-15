@@ -3,7 +3,6 @@ import ChangeStatusForm from "../forms/ChangeStatusForm";
 import EditIssueForm from "../forms/EditIssueForm";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
 import DeleteIssueConfirm from "../forms/DeleteIssueConfirm";
 import Avatar from "react-avatar";
 import Moment from "react-moment";
@@ -13,28 +12,11 @@ function IssueSide({ selectedIssue, setSelectedIssue, params, project }) {
   const [displayEditIssue, displayEditIssueToggle] = useState(false);
   const [displayDeleteIssue, displayDeleteIssueToggle] = useState(false);
 
-  const {
-    _id,
-    progress,
-    assignee,
-    date,
-    comments,
-    issueType,
-    issueName,
-    issueNumber,
-    summary,
-    description,
-    priority,
-    name,
-    user,
-    dueDate,
-  } = selectedIssue;
+  const { progress, assignee, priority, name, user, dueDate } = selectedIssue;
 
   const isCreator =
     project.user === localStorage.getItem("currentUserId") ||
     user === localStorage.getItem("currentUserId");
-
-  console.log(progress);
 
   return (
     <div className="issue__side">
@@ -150,6 +132,8 @@ function IssueSide({ selectedIssue, setSelectedIssue, params, project }) {
   );
 }
 
-IssueSide.propTypes = {};
+IssueSide.propTypes = {
+  selectedIssue: PropTypes.object.isRequired,
+};
 
 export default IssueSide;

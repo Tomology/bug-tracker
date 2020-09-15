@@ -14,11 +14,8 @@ const TeamInviteItem = ({ request, params, respondFriendRequest }) => {
   return (
     <div className="profile__receivedRequests--requests-team">
       <span>
-        <a href="#">
-          {`${request.creator.firstName} ${request.creator.lastName}`}
-        </a>{" "}
-        has invited you to join their team:{" "}
-        <a href="#">{`${request.teamName}`}</a>
+        {`${request.creator.firstName} ${request.creator.lastName}`} has invited
+        you to join their team {`${request.teamName}`}.
       </span>
 
       <div className="profile__receivedRequests--buttons">

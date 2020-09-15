@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import IssueItem from "./IssueItem";
 import Select from "react-select";
 import { filterStyles } from "../../../utils/reactSelectStyles";

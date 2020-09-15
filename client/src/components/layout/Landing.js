@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Register from "../auth/Register";
 import Login from "../auth/Login";
 
 const Landing = ({ isAuthenticated }) => {
-  const [authFormToggle, setAuthFormToggle] = useState("auth");
+  const [authFormToggle, setAuthFormToggle] = useState("auth login-selected");
 
   if (isAuthenticated) {
     return <Redirect to="/dashboard" />;

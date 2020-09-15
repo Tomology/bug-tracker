@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import IssueSide from "./layout/IssueSide";
 import IssueMain from "./layout/IssueMain";
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -11,7 +11,6 @@ function ChangeStatusForm({
   selectedIssue,
   params,
 }) {
-  const [previousStatus, setPreviousStatus] = useState({});
   const [formData, setFormData] = useState({
     label: `${selectedIssue.progress.progress}`,
     value: `${selectedIssue.progress.progress}`,

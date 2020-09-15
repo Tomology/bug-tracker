@@ -288,6 +288,12 @@ const ProfileAboutReadOnly = ({
   );
 };
 
-ProfileAboutReadOnly.propTypes = {};
+ProfileAboutReadOnly.propTypes = {
+  profile: PropTypes.object.isRequired,
+  setEditing: PropTypes.func,
+  params: PropTypes.string.isRequired,
+  teams: PropTypes.array.isRequired,
+  history: PropTypes.object.isRequired,
+};
 
 export default withRouter(ProfileAboutReadOnly);

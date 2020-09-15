@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 function IssueItem({ issue, projectKey, selectedIssue, setSelectedIssue }) {
   const bgColor = (id) => {
@@ -9,7 +9,7 @@ function IssueItem({ issue, projectKey, selectedIssue, setSelectedIssue }) {
   };
 
   return (
-    <a
+    <div
       className="project__side--issuesList-item"
       style={{ backgroundColor: bgColor(issue._id) }}
       onClick={() => {
@@ -34,7 +34,7 @@ function IssueItem({ issue, projectKey, selectedIssue, setSelectedIssue }) {
       <span>
         {`${projectKey}-${issue.issueNumber}`}: {issue.issueName}
       </span>
-    </a>
+    </div>
   );
 }
 

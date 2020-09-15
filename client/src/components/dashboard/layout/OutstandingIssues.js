@@ -4,10 +4,9 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 function OutstandingIssues({ outstandingIssues }) {
-  const todayDate = Date.now();
   const osIssuesJSX = outstandingIssues.map((issue) => {
     return (
-      <tr className="dashboard__issues--rows">
+      <tr key={issue.issueId} className="dashboard__issues--rows">
         <td>
           <Link to={`/projects/${issue.projectId}`}>{issue.projectName}</Link>
         </td>
@@ -25,23 +24,29 @@ function OutstandingIssues({ outstandingIssues }) {
   });
   return (
     <table className="dashboard__issues">
-      <tr className="dashboard__issues--headings">
-        <th>Project Name</th>
-        <th>Issue Name</th>
-        <th>Status</th>
-        <th>Due Date</th>
-      </tr>
-      {outstandingIssues.length > 0 ? (
-        osIssuesJSX
-      ) : (
-        <tr className="dashboard__issues--nil">
-          <td colspan="4">No issues have been assigned to you.</td>
+      <thead>
+        <tr className="dashboard__issues--headings">
+          <th>Project Name</th>
+          <th>Issue Name</th>
+          <th>Status</th>
+          <th>Due Date</th>
         </tr>
-      )}
+      </thead>
+      <tbody>
+        {outstandingIssues.length > 0 ? (
+          osIssuesJSX
+        ) : (
+          <tr className="dashboard__issues--nil">
+            <td colSpan="4">No issues have been assigned to you.</td>
+          </tr>
+        )}
+      </tbody>
     </table>
   );
 }
 
-OutstandingIssues.propTypes = {};
+OutstandingIssues.propTypes = {
+  outstandingIssues: PropTypes.array.isRequired,
+};
 
 export default OutstandingIssues;

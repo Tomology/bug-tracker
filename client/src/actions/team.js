@@ -53,8 +53,6 @@ export const createTeam = (formData, history) => async (dispatch) => {
     const errors = err.response.data.errors;
 
     if (errors) {
-      //console.log(errors);
-      //errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
       dispatch({
         type: VALIDATION_ERROR,
         payload: errors,
@@ -99,12 +97,10 @@ export const editTeam = (formData, teamId) => async (dispatch) => {
       payload: res.data,
     });
 
-    console.log(res.data);
-
     if (formData.members) {
-      dispatch(setAlert("Invites Sent Out"));
+      dispatch(setAlert("Invites sent out"));
     } else {
-      dispatch(setAlert("Profile Updated"));
+      dispatch(setAlert("Profile updated"));
     }
   } catch (err) {
     dispatch({
@@ -119,7 +115,7 @@ export const deleteTeam = (teamId, history) => async (dispatch) => {
   try {
     await axios.delete(`/api/teams/${teamId}`);
 
-    dispatch(setAlert("Team Deleted"));
+    dispatch(setAlert("Team deleted"));
 
     history.push("/people");
 
@@ -144,7 +140,7 @@ export const removeMember = (teamId, memberId) => async (dispatch) => {
       payload: memberId,
     });
 
-    dispatch(setAlert("Team Member Removed"));
+    dispatch(setAlert("Team member removed"));
   } catch (err) {
     dispatch({
       type: TEAM_ERROR,

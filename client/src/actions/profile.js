@@ -63,7 +63,7 @@ export const editProfile = (formData, userId) => async (dispatch) => {
       payload: res.data,
     });
 
-    dispatch(setAlert("Profile Updated"));
+    dispatch(setAlert("Profile updated"));
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
@@ -88,9 +88,9 @@ export const respondFriendRequest = (
     let alertText = "";
 
     if (responseObject.status === true) {
-      alertText = "added";
+      alertText = "accepted.";
     } else {
-      alertText = "declined";
+      alertText = "declined.";
     }
 
     await axios.post(
@@ -129,9 +129,9 @@ export const respondFriendRequestSearch = (
     let alertText = "";
 
     if (responseObject.status === true) {
-      alertText = "added";
+      alertText = "accepted.";
     } else {
-      alertText = "declined";
+      alertText = "declined.";
     }
 
     const res = await axios.post(
@@ -166,7 +166,7 @@ export const respondFriendRequestSearch = (
 // Delete Account
 export const deleteAccount = (userId, history) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/people/${userId}`);
+    await axios.delete(`/api/people/${userId}`);
     history.push("/");
 
     dispatch({
@@ -176,6 +176,6 @@ export const deleteAccount = (userId, history) => async (dispatch) => {
       type: ACCOUNT_DELETED,
     });
 
-    dispatch(setAlert("Your account has been deleted"));
+    dispatch(setAlert("Your account has been deleted."));
   } catch (err) {}
 };

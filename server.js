@@ -23,4 +23,3 @@ app.use("/api/projects", require("./routes/api/projects"));
 app.use("/api/teams", require("./routes/api/teams"));
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/your-work", require("./routes/api/your-work"));
-app.use("/api/bugtest", require("./routes/api/bugtest"));

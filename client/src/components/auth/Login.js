@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login, removeValidationErrorAlert } from "../../actions/auth";
@@ -20,16 +20,18 @@ const Login = ({
   const { email, password } = formData;
 
   const onChange = (e) => {
+    // Remove validation error(s) when field is changed
     if (validationError.length > 0) {
       removeValidationErrorAlert();
     }
-
     if (e.target.name === "email" && invalidEmail === true) {
       setInvalidEmail(false);
     }
     if (e.target.name === "password" && invalidPassword === true) {
       setInvalidPassword(false);
     }
+
+    // Set the form data
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -52,6 +54,10 @@ const Login = ({
     }
 
     login(email, password);
+
+    if (validationError.length === 0) {
+      document.getElementById("SIGN IN").value = "SIGNING IN...";
+    }
   };
 
   // Redirect if logged in
@@ -100,9 +106,10 @@ const Login = ({
       )}
       <InvalidCredentials />
       <input
+        id="SIGN IN"
         type="submit"
-        value="Log In"
-        className="auth__login--submit btn btn-green u-margin-top-small"
+        value="SIGN IN"
+        className="auth__login--submit btn btn-auth u-margin-top-small"
       />
     </form>
   );

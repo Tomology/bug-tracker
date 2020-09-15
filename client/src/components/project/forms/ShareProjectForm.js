@@ -16,7 +16,6 @@ function ShareProjectForm({
     sharedWith: [],
   });
   const shareWithOptions = [];
-  console.log(shareWithOptions);
 
   people.map((person) =>
     shareWithOptions.push({
@@ -70,6 +69,11 @@ function ShareProjectForm({
               Cancel
             </button>
             <button
+              disabled={
+                !formData.sharedWith || formData.sharedWith.length === 0
+                  ? true
+                  : false
+              }
               className="btn btn-green btn-form popup__form--create"
               type="submit"
             >
