@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 import IssuesList from "./layout/IssuesList";
 
 function Issues({
@@ -21,5 +22,13 @@ function Issues({
     </Fragment>
   );
 }
+
+Issues.propTypes = {
+  project: PropTypes.object.isRequired,
+  teams: PropTypes.array.isRequired,
+  selectedIssue: PropTypes.object.isRequired,
+  setSelectedIssue: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string,
+};
 
 export default Issues;

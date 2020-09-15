@@ -48,7 +48,7 @@ function IssueSide({ selectedIssue, setSelectedIssue, params, project }) {
       )}
       <div className="issue__side--assignee">
         <span className="issue__side--heading">Assignee(s)</span>
-        {assignee ? (
+        {assignee && assignee.length > 0 ? (
           assignee.map((assignee) => (
             <div key={assignee._id} className="issue__side--assignee-item">
               <Avatar
@@ -61,7 +61,7 @@ function IssueSide({ selectedIssue, setSelectedIssue, params, project }) {
             </div>
           ))
         ) : (
-          <div>Unassigned</div>
+          <div style={{ fontSize: 12.6 }}>Unassigned</div>
         )}
       </div>
       <div className="issue__side--reporter">
@@ -134,6 +134,9 @@ function IssueSide({ selectedIssue, setSelectedIssue, params, project }) {
 
 IssueSide.propTypes = {
   selectedIssue: PropTypes.object.isRequired,
+  setSelectedIssue: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired,
+  params: PropTypes.string.isRequired,
 };
 
 export default IssueSide;

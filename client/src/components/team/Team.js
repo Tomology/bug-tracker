@@ -37,6 +37,7 @@ Team.propTypes = {
   getPeople: PropTypes.func.isRequired,
   team: PropTypes.object.isRequired,
   people: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

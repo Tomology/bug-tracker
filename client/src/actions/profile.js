@@ -140,8 +140,6 @@ export const respondFriendRequestSearch = (
       config
     );
 
-    console.log(responseObject.status === false);
-
     if (responseObject.status === true) {
       dispatch({
         type: FRIEND_REQUEST_RESPONSE_SEARCH,

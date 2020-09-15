@@ -30,7 +30,7 @@ const People = ({
     getPeople();
     getTeams();
     getProfileById(localStorage.getItem("currentUserId"));
-  }, []);
+  }, [getPeople, getTeams, getProfileById]);
 
   return (
     <Fragment>

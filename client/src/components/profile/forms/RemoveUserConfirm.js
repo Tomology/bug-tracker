@@ -47,6 +47,10 @@ function RemoveUserConfirm({
 
 RemoveUserConfirm.propTypes = {
   removeContact: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  params: PropTypes.string.isRequired,
+  toggleRemoveUser: PropTypes.func.isRequired,
+  hasMutualTeam: PropTypes.bool.isRequired,
 };
 
 export default connect(null, { removeContact })(RemoveUserConfirm);

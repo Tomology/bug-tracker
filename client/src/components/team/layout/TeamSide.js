@@ -150,6 +150,8 @@ function TeamSide({
 
 TeamSide.propTypes = {
   removeMember: PropTypes.func.isRequired,
+  team: PropTypes.object.isRequired,
+  people: PropTypes.object.isRequired,
 };
 
 export default connect(null, { removeMember })(TeamSide);

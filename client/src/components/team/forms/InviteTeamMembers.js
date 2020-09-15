@@ -72,6 +72,9 @@ function InviteTeamMembers({ people, team, addPeopleToggle, editTeam }) {
 
 InviteTeamMembers.propTypes = {
   editTeam: PropTypes.func.isRequired,
+  addPeopleToggle: PropTypes.func.isRequired,
+  team: PropTypes.object.isRequired,
+  people: PropTypes.object.isRequired,
 };
 
 export default connect(null, { editTeam })(InviteTeamMembers);

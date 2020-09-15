@@ -110,6 +110,9 @@ const PeopleSearchItem = ({
 PeopleSearchItem.propTypes = {
   sendRequest: PropTypes.func.isRequired,
   respondFriendRequestSearch: PropTypes.func.isRequired,
+  people: PropTypes.array.isRequired,
+  person: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
 export default connect(null, { sendRequest, respondFriendRequestSearch })(

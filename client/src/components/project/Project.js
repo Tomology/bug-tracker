@@ -40,12 +40,12 @@ function Project({
     getProjectById(match.params.project_id);
     getPeople();
     getTeams();
-    console.log("Non conditional use effec is executed");
+
     if (selectedIssue._id !== "") {
       let issueIndex = project.issues
         .map((issue) => issue._id)
         .indexOf(selectedIssue._id);
-      console.log(project.issues[issueIndex]);
+
       setSelectedIssue({
         ...selectedIssue,
         comments: project.issues[issueIndex].comments,
@@ -58,7 +58,6 @@ function Project({
         assignee: project.issues[issueIndex].assignee,
         dueDate: project.issues[issueIndex].dueDate,
       });
-      console.log("Conditional statement executed", project);
     }
   }, [
     getProjectById,
@@ -109,6 +108,7 @@ Project.propTypes = {
   project: PropTypes.object.isRequired,
   people: PropTypes.object.isRequired,
   team: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

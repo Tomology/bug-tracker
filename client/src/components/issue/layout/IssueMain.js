@@ -54,6 +54,9 @@ function IssueMain({
 
 IssueMain.propTypes = {
   selectedIssue: PropTypes.object.isRequired,
+  setSelectedIssue: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired,
+  params: PropTypes.string.isRequired,
 };
 
 export default IssueMain;

@@ -88,6 +88,10 @@ function ShareProjectForm({
 
 ShareProjectForm.propTypes = {
   editProject: PropTypes.func.isRequired,
+  shareProjectToggle: PropTypes.func.isRequired,
+  people: PropTypes.array.isRequired,
+  teams: PropTypes.array.isRequired,
+  params: PropTypes.string.isRequired,
 };
 
 export default connect(null, { editProject })(ShareProjectForm);

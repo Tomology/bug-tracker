@@ -202,6 +202,11 @@ function CreateIssueForm({
 
 CreateIssueForm.propTypes = {
   createIssue: PropTypes.func.isRequired,
+  sharedWith: PropTypes.array.isRequired,
+  creatorId: PropTypes.string.isRequired,
+  creatorName: PropTypes.string.isRequired,
+  params: PropTypes.string.isRequired,
+  displayCreateIssueToggle: PropTypes.func.isRequired,
 };
 
 export default connect(null, { createIssue })(CreateIssueForm);

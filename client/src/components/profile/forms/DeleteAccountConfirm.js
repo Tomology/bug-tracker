@@ -64,6 +64,12 @@ function DeleteAccountConfirm({
 DeleteAccountConfirm.propTypes = {
   deleteAccount: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
+  deleteEmail: PropTypes.string.isRequired,
+  setDeleteEmail: PropTypes.func.isRequired,
+  email: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
+  toggleConfirmDelete: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default connect(null, { setAlert, deleteAccount })(DeleteAccountConfirm);

@@ -17,7 +17,7 @@ function EditTeamForm({ editTeamToggle, team, loading, editTeam }) {
       teamDescription:
         loading || !team.teamDescription ? "" : team.teamDescription,
     });
-  }, [loading]);
+  }, [loading, team.teamName, team.teamDescription]);
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -78,6 +78,9 @@ function EditTeamForm({ editTeamToggle, team, loading, editTeam }) {
 
 EditTeamForm.propTypes = {
   editTeam: PropTypes.func.isRequired,
+  editTeamToggle: PropTypes.func.isRequired,
+  team: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default connect(null, { editTeam })(EditTeamForm);

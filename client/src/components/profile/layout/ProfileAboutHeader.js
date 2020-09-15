@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 import Avatar from "react-avatar";
 
 const ProfileAboutHeader = ({ profile: { user } }) => {
@@ -16,6 +17,10 @@ const ProfileAboutHeader = ({ profile: { user } }) => {
       <h3>About</h3>
     </Fragment>
   );
+};
+
+ProfileAboutHeader.propTypes = {
+  profile: PropTypes.object.isRequired,
 };
 
 export default ProfileAboutHeader;

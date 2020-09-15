@@ -39,6 +39,9 @@ function ProjectSharedWith({
 
 ProjectSharedWith.propTypes = {
   unshareProject: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired,
+  params: PropTypes.string.isRequired,
+  displaySharedWithToggle: PropTypes.func.isRequired,
 };
 
 export default connect(null, { unshareProject })(ProjectSharedWith);

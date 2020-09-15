@@ -9,7 +9,7 @@ import Spinner from "../layout/Spinner";
 import CreateProjectForm from "./forms/CreateProjectForm";
 
 function Projects({
-  project: { projects, project, loading },
+  project: { projects },
   people,
   team: { teams },
   getProjects,
@@ -83,6 +83,9 @@ Projects.propTypes = {
   getProjects: PropTypes.func.isRequired,
   getPeople: PropTypes.func.isRequired,
   getTeams: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired,
+  people: PropTypes.object.isRequired,
+  team: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

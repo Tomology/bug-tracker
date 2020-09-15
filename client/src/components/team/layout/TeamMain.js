@@ -1,7 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ProjectItem from "../../projects/layout/ProjectItem";
 
-function TeamMain({ team: { team, projects } }) {
+function TeamMain({ team: { projects } }) {
   const teamProjects = projects.map((project) => (
     <ProjectItem project={project} key={project._id} />
   ));
@@ -15,5 +16,9 @@ function TeamMain({ team: { team, projects } }) {
     </div>
   );
 }
+
+TeamMain.propTypes = {
+  team: PropTypes.object.isRequired,
+};
 
 export default TeamMain;

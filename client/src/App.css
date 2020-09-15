@@ -73,31 +73,48 @@ body {
   font-size: 6rem;
   margin-bottom: 6rem;
 }
-.alert {
+.alert_container {
   position: fixed;
-  right: 10rem;
-  bottom: 10rem;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  height: min-content;
+  width: 19vw;
+}
+@media (max-width: 37.5em) {
+  .alert_container {
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+  }
+}
+.alert_container .alert {
+  position: relative;
   border: 1px solid #55c57a;
   border-radius: 1rem;
-  padding: 2rem;
+  padding: 1rem 2rem;
   box-shadow: 0.1rem 0.1rem 1rem #55c57a;
   background-color: rgba(255, 255, 255, 0.75);
   z-index: 777;
+  height: min-content;
+  margin-bottom: 0.5rem;
 }
-.alert_close {
+.alert_container .alert_close {
   position: absolute;
   right: 1rem;
   top: 0;
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #777;
 }
-.alert_close:hover {
+.alert_container .alert_close:hover {
   color: #eee;
   cursor: pointer;
 }
-.alert_message {
-  font-size: 1.75rem;
-  padding: 1rem;
+.alert_container .alert_message {
+  font-size: 1.3rem;
+  padding: 0rem;
   color: #777;
 }
 .login-selected .auth__register {
@@ -373,6 +390,11 @@ body {
   justify-self: center;
   padding: 1rem;
   border-radius: 5rem;
+  background-color: linear-gradient(
+    to right bottom,
+    rgba(40, 180, 133, 0.6),
+    rgba(126, 213, 111, 0.6)
+  );
 }
 .btn {
   display: inline-block;
@@ -399,6 +421,17 @@ body {
 .btn-animated:active {
   transform: translateY(-1px);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+.btn-auth {
+  font-size: 1.5rem;
+  border-radius: 10rem;
+  color: #000;
+  transition: all 0.2s;
+  background-image: linear-gradient(
+    to right bottom,
+    rgba(40, 180, 133, 0.5),
+    rgba(126, 213, 111, 0.5)
+  );
 }
 .btn-form {
   border-radius: 3px;
@@ -762,10 +795,10 @@ body {
   cursor: pointer;
 }
 .toggle__button:hover .toggle__button--icon::before {
-  top: -0.9rem;
+  top: -0.8rem;
 }
 .toggle__button:hover .toggle__button--icon::after {
-  top: 0.9rem;
+  top: 0.8rem;
 }
 .toggle__button--icon {
   position: relative;
@@ -787,10 +820,10 @@ body {
   transition: all 0.2s;
 }
 .toggle__button--icon::before {
-  top: -0.7rem;
+  top: -0.6rem;
 }
 .toggle__button--icon::after {
-  top: 0.7rem;
+  top: 0.6rem;
 }
 .navigation {
   background-color: #55c57a;
@@ -1034,6 +1067,7 @@ body {
   flex-direction: column;
   text-align: center;
   transition: all 0.4s;
+  min-height: 20rem;
 }
 .people__teams--teamItem:hover {
   box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.2);

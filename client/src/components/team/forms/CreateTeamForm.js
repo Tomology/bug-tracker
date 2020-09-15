@@ -102,6 +102,9 @@ function CreateTeamForm({ people, createTeam, createTeamToggle, history }) {
 
 CreateTeamForm.propTypes = {
   createTeam: PropTypes.func.isRequired,
+  createTeamToggle: PropTypes.func.isRequired,
+  people: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default connect(null, { createTeam })(withRouter(CreateTeamForm));

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import FriendRequestItem from "./FriendRequestItem";
 import TeamInviteItem from "./TeamInviteItem";
 
@@ -35,5 +36,10 @@ function PendingRequests({ receivedRequests, params }) {
     </div>
   );
 }
+
+PendingRequests.propTypes = {
+  receivedRequests: PropTypes.array,
+  params: PropTypes.string.isRequired,
+};
 
 export default PendingRequests;

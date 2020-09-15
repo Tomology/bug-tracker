@@ -69,6 +69,12 @@ function IssueComments({
 
 IssueComments.propTypes = {
   deleteComment: PropTypes.func.isRequired,
+  comments: PropTypes.array.isRequired,
+  issueId: PropTypes.string.isRequired,
+  params: PropTypes.string.isRequired,
+  project: PropTypes.object.isRequired,
+  selectedIssue: PropTypes.object.isRequired,
+  setSelectedIssue: PropTypes.func.isRequired,
 };
 
 export default connect(null, { deleteComment })(IssueComments);

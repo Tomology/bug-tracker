@@ -141,6 +141,10 @@ function CreateProjectForm({
 
 CreateProjectForm.propTypes = {
   createProject: PropTypes.func.isRequired,
+  createProjectToggle: PropTypes.func.isRequired,
+  people: PropTypes.object.isRequired,
+  teams: PropTypes.array.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default connect(null, { createProject })(withRouter(CreateProjectForm));

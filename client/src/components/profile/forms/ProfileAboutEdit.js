@@ -191,6 +191,11 @@ const ProfileAboutEdit = ({
 
 ProfileAboutEdit.propTypes = {
   editProfile: PropTypes.func.isRequired,
+  setEditing: PropTypes.func.isRequired,
+  params: PropTypes.string.isRequired,
+  profile: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  getProfileById: PropTypes.func.isRequired,
 };
 
 export default connect(null, { editProfile })(ProfileAboutEdit);

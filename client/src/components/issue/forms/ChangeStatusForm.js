@@ -82,6 +82,9 @@ function ChangeStatusForm({
 
 ChangeStatusForm.propTypes = {
   updateStatus: PropTypes.func.isRequired,
+  displayChangeStatusToggle: PropTypes.func.isRequired,
+  selectedIssue: PropTypes.object.isRequired,
+  params: PropTypes.string.isRequired,
 };
 
 export default connect(null, { updateStatus })(ChangeStatusForm);

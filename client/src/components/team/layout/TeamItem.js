@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Avatar from "react-avatar";
 import { Link } from "react-router-dom";
 import gradient from "random-gradient";
@@ -21,6 +22,10 @@ const TeamItem = ({ team }) => {
       ></Avatar>
     </Link>
   );
+};
+
+TeamItem.propTypes = {
+  team: PropTypes.object.isRequired,
 };
 
 export default TeamItem;

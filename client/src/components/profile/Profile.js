@@ -24,7 +24,6 @@ const Profile = ({
   team: { teams },
   project: { projects },
   profile: { profile, receivedRequests, loading },
-  auth,
 }) => {
   const [isEditing, setEditing] = useState(false);
 
@@ -35,7 +34,13 @@ const Profile = ({
     if (localStorage.getItem("currentUserId") === match.params.user_id) {
       getPendingRequests(match.params.user_id);
     }
-  }, [getProfileById, match.params.user_id]);
+  }, [
+    getProfileById,
+    getProjects,
+    getTeams,
+    getPendingRequests,
+    match.params.user_id,
+  ]);
 
   const ownProfile = (
     <Fragment>
@@ -51,7 +56,12 @@ const Profile = ({
               getProfileById={getProfileById}
             />
           ) : (
-            <ProfileAboutReadOnly profile={profile} setEditing={setEditing} />
+            <ProfileAboutReadOnly
+              profile={profile}
+              setEditing={setEditing}
+              params={match.params.user_id}
+              teams={teams}
+            />
           )}
         </div>
         <div className="profile__main">
@@ -157,7 +167,11 @@ const Profile = ({
     <Fragment>
       {currentUserProfile ? (
         <Fragment>
-          {team.loading || project.loading || loading || !receivedRequests ? (
+          {team.loading ||
+          project.loading ||
+          loading ||
+          !receivedRequests ||
+          !profile ? (
             <Spinner />
           ) : (
             <Fragment>{ownProfile}</Fragment>
@@ -165,7 +179,7 @@ const Profile = ({
         </Fragment>
       ) : (
         <Fragment>
-          {team.loading || project.loading || loading ? (
+          {team.loading || project.loading || loading || !profile ? (
             <Spinner />
           ) : (
             <Fragment>{otherProfile}</Fragment>
@@ -182,14 +196,13 @@ Profile.propTypes = {
   getTeams: PropTypes.func.isRequired,
   getPendingRequests: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   team: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   profile: state.profile,
-  auth: state.auth,
   project: state.project,
   team: state.team,
 });

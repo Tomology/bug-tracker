@@ -10,8 +10,6 @@ function RemoveFromProjectsConfirm({
   params,
   history,
 }) {
-  console.log(params);
-
   return (
     <div className="popup">
       <div className="deleteWarning__content">
@@ -52,6 +50,9 @@ function RemoveFromProjectsConfirm({
 
 RemoveFromProjectsConfirm.propTypes = {
   removeSharedProject: PropTypes.func.isRequired,
+  removeProjectToggle: PropTypes.func.isRequired,
+  params: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default connect(null, { removeSharedProject })(

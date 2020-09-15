@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import IssueItem from "./IssueItem";
 import Select from "react-select";
 import { filterStyles } from "../../../utils/reactSelectStyles";
@@ -12,7 +13,6 @@ function IssuesList({
   teams,
 }) {
   const [issueFilters, setIssueFilters] = useState("All");
-
   const teamIds = teams.map((team) => team._id.toString());
 
   const filterOptions = [
@@ -82,5 +82,14 @@ function IssuesList({
     </div>
   );
 }
+
+IssuesList.propTypes = {
+  issues: PropTypes.array.isRequired,
+  projectKey: PropTypes.string.isRequired,
+  selectedIssue: PropTypes.object.isRequired,
+  setSelectedIssue: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string,
+  teams: PropTypes.array.isRequired,
+};
 
 export default IssuesList;

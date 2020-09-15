@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import TeamItem from "./TeamItem";
 
 function TeamList({ teams, searchTerm, createTeamToggle }) {
@@ -32,5 +33,11 @@ function TeamList({ teams, searchTerm, createTeamToggle }) {
     </div>
   );
 }
+
+TeamList.propTypes = {
+  teams: PropTypes.array.isRequired,
+  searchTerm: PropTypes.string,
+  createTeamToggle: PropTypes.func.isRequired,
+};
 
 export default TeamList;

@@ -62,6 +62,10 @@ function DeleteIssueConfirm({
 
 DeleteIssueConfirm.propTypes = {
   deleteIssue: PropTypes.func.isRequired,
+  params: PropTypes.string.isRequired,
+  selectedIssue: PropTypes.object.isRequired,
+  setSelectedIssue: PropTypes.func.isRequired,
+  displayDeleteIssueToggle: PropTypes.func.isRequired,
 };
 
 export default connect(null, { deleteIssue })(DeleteIssueConfirm);

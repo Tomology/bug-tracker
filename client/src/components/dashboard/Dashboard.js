@@ -58,6 +58,8 @@ Dashboard.propTypes = {
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
   getProfileById: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired,
+  getOutstandingIssues: PropTypes.func.isRequired,
 };
 
 const mapSateToProps = (state) => ({

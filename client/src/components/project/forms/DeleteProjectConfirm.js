@@ -44,6 +44,9 @@ function DeleteProjectConfirm({
 
 DeleteProjectConfirm.propTypes = {
   deleteProject: PropTypes.func.isRequired,
+  displayDeleteWarningToggle: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  params: PropTypes.string.isRequired,
 };
 
 export default connect(null, { deleteProject })(

@@ -109,6 +109,14 @@ function ProjectSide({
   );
 }
 
-ProjectSide.propTypes = {};
+ProjectSide.propTypes = {
+  project: PropTypes.object.isRequired,
+  people: PropTypes.array.isRequired,
+  teams: PropTypes.array.isRequired,
+  params: PropTypes.string.isRequired,
+  selectedIssue: PropTypes.object.isRequired,
+  setSelectedIssue: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+};
 
 export default ProjectSide;

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function IssueItem({ issue, projectKey, selectedIssue, setSelectedIssue }) {
   const bgColor = (id) => {
@@ -37,5 +38,12 @@ function IssueItem({ issue, projectKey, selectedIssue, setSelectedIssue }) {
     </div>
   );
 }
+
+IssueItem.propTypes = {
+  issue: PropTypes.object.isRequired,
+  projectKey: PropTypes.string.isRequired,
+  selectedIssue: PropTypes.object.isRequired,
+  setSelectedIssue: PropTypes.func.isRequired,
+};
 
 export default IssueItem;

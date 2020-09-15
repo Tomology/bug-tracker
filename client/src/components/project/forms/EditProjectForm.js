@@ -23,7 +23,7 @@ function EditProjectForm({
       key: !project.key ? "" : project.key,
       url: !project.url ? "" : project.url,
     });
-  }, []);
+  }, [project.projectName, project.key, project.url]);
 
   const onChange = (e) => {
     setFormData({
@@ -88,7 +88,7 @@ function EditProjectForm({
             </button>
             <button
               type="submit"
-              class="btn btn-green btn-form popup__form--create"
+              className="btn btn-green btn-form popup__form--create"
               disabled={projectName.length === 0 || key.length === 0}
             >
               Save Changes
@@ -102,6 +102,9 @@ function EditProjectForm({
 
 EditProjectForm.propTypes = {
   editProject: PropTypes.func.isRequired,
+  editProjectFormToggle: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired,
+  params: PropTypes.string.isRequired,
 };
 
 export default connect(null, { editProject })(EditProjectForm);

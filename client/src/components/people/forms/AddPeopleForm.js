@@ -72,6 +72,11 @@ function AddPeopleForm({
 
 AddPeopleForm.propTypes = {
   searchPerson: PropTypes.func.isRequired,
+  error: PropTypes.object,
+  person: PropTypes.object,
+  people: PropTypes.array.isRequired,
+  profile: PropTypes.object.isRequired,
+  addPeopleToggle: PropTypes.func.isRequired,
 };
 
 export default connect(null, { searchPerson })(AddPeopleForm);

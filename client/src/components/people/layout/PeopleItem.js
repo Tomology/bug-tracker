@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Avatar from "react-avatar";
 
@@ -18,5 +19,7 @@ const PeopleItem = ({ person }) => {
     </Link>
   );
 };
+
+PeopleItem.propTypes = { person: PropTypes.object.isRequired };
 
 export default PeopleItem;

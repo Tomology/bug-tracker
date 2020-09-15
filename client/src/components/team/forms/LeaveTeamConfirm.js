@@ -41,6 +41,9 @@ function LeaveTeamConfirm({ leaveTeamToggle, leaveTeam, history, team }) {
 
 LeaveTeamConfirm.propTypes = {
   leaveTeam: PropTypes.func.isRequired,
+  leaveTeamToggle: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  team: PropTypes.object.isRequired,
 };
 
 export default connect(null, { leaveTeam })(withRouter(LeaveTeamConfirm));

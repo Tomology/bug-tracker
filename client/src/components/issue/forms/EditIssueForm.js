@@ -208,6 +208,10 @@ export const EditIssueForm = ({
 
 EditIssueForm.propTypes = {
   editIssue: PropTypes.func.isRequired,
+  selectedIssue: PropTypes.object.isRequired,
+  displayEditIssueToggle: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired,
+  params: PropTypes.string.isRequired,
 };
 
 export default connect(null, { editIssue })(EditIssueForm);

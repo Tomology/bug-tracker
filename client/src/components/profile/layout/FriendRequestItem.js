@@ -38,6 +38,8 @@ function FriendRequestItem({ request, params, respondFriendRequest }) {
 
 FriendRequestItem.propTypes = (state) => ({
   respondFriendRequest: PropTypes.func.isRequired,
+  request: PropTypes.object.isRequired,
+  params: PropTypes.string.isRequired,
 });
 
 export default connect(null, { respondFriendRequest })(FriendRequestItem);

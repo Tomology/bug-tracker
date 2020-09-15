@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Avatar from "react-avatar";
 
@@ -55,5 +56,10 @@ function ProjectList({ projects, searchTerm }) {
     </table>
   );
 }
+
+ProjectList.propTypes = {
+  projects: PropTypes.array.isRequired,
+  searchTerm: PropTypes.string,
+};
 
 export default ProjectList;

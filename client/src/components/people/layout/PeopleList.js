@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import PeopleItem from "./PeopleItem";
 
 function PeopleList({ people, searchTerm, addPeopleToggle }) {
@@ -117,5 +118,11 @@ function PeopleList({ people, searchTerm, addPeopleToggle }) {
     </div>
   );
 }
+
+PeopleList.propTypes = {
+  people: PropTypes.array.isRequired,
+  searchTerm: PropTypes.string,
+  addPeopleToggle: PropTypes.func.isRequired,
+};
 
 export default PeopleList;

@@ -39,6 +39,9 @@ function DeleteTeamConfirm({
 
 DeleteTeamConfirm.propTypes = {
   deleteTeam: PropTypes.func.isRequired,
+  deleteTeamConfirmToggle: PropTypes.func.isRequired,
+  team: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default connect(null, { deleteTeam })(withRouter(DeleteTeamConfirm));
