@@ -49,6 +49,7 @@ function CreateTeamForm({ people, createTeam, createTeamToggle, history }) {
             type="text"
             id="teamName"
             name="teamName"
+            maxLength="50"
             value={teamName}
             className="form__input"
             onChange={(e) => onChange(e)}
@@ -57,6 +58,7 @@ function CreateTeamForm({ people, createTeam, createTeamToggle, history }) {
           <textarea
             name="teamDescription"
             id="teamDescription"
+            maxLength="5000"
             value={teamDescription}
             className="form__input"
             onChange={(e) => onChange(e)}

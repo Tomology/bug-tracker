@@ -27,6 +27,7 @@ const CommentForm = ({ addComment, params, issueId }) => {
         placeholder="Add a comment..."
         className="form__input issue__main--comments-input"
         name="comment"
+        maxLength="5000"
         value={commentText.text}
         onChange={(e) => onChange(e)}
       />

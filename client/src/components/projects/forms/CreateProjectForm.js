@@ -68,6 +68,7 @@ function CreateProjectForm({
             type="text"
             name="projectName"
             id="projectName"
+            maxLength="50"
             value={projectName}
             className="form__input"
             onChange={(e) => onChange(e)}
@@ -79,6 +80,7 @@ function CreateProjectForm({
             type="text"
             name="key"
             id="key"
+            maxLength="10"
             value={key}
             className="form__input"
             placeholder={
@@ -96,6 +98,7 @@ function CreateProjectForm({
             type="text"
             name="url"
             id="url"
+            maxLength="5000"
             value={url}
             className="form__input"
             onChange={(e) => onChange(e)}

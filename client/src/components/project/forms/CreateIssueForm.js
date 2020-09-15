@@ -92,6 +92,7 @@ function CreateIssueForm({
           <input
             type="text"
             name="issueName"
+            maxLength="50"
             id="issueName"
             className="form__input"
             value={issueName}
@@ -132,6 +133,7 @@ function CreateIssueForm({
             id="summary"
             className="form__input"
             name="summary"
+            maxLength="10000"
             value={summary}
             onChange={(e) => onChange(e)}
           />
@@ -142,6 +144,7 @@ function CreateIssueForm({
             name="description"
             className="form__input"
             id="description"
+            maxLength="50000"
             value={description}
             onChange={(e) => onChange(e)}
           />

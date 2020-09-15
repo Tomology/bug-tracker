@@ -71,6 +71,7 @@ const ProfileAboutEdit = ({
           <input
             type="text"
             name="jobTitle"
+            maxLength="100"
             value={jobTitle}
             onChange={(e) => onChange(e)}
             className="form__input"
@@ -96,6 +97,7 @@ const ProfileAboutEdit = ({
           <input
             type="text"
             name="department"
+            maxLength="100"
             value={department}
             onChange={(e) => onChange(e)}
             className="form__input"
@@ -121,6 +123,7 @@ const ProfileAboutEdit = ({
           <input
             type="text"
             name="organization"
+            maxLength="100"
             value={organization}
             onChange={(e) => onChange(e)}
             className="form__input"
@@ -147,6 +150,7 @@ const ProfileAboutEdit = ({
             type="text"
             className="form__input"
             name="location"
+            maxLength="100"
             value={location}
             onChange={(e) => onChange(e)}
             placeholder="Your Location"

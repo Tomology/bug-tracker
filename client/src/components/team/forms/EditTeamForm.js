@@ -43,6 +43,7 @@ function EditTeamForm({ editTeamToggle, team, loading, editTeam }) {
             type="text"
             name="teamName"
             id="teamName"
+            maxLength="50"
             value={teamName}
             className="form__input"
             onChange={(e) => onChange(e)}
@@ -52,6 +53,7 @@ function EditTeamForm({ editTeamToggle, team, loading, editTeam }) {
             name="teamDescription"
             id="teamDescription"
             className="form__input"
+            maxLength="5000"
             value={teamDescription}
             onChange={(e) => onChange(e)}
           />

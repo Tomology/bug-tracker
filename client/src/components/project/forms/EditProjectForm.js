@@ -54,6 +54,7 @@ function EditProjectForm({
           <input
             type="text"
             name="projectName"
+            maxLength="50"
             value={projectName}
             id="projectName"
             className="form__input"
@@ -67,6 +68,7 @@ function EditProjectForm({
             name="key"
             id="key"
             className="form__input"
+            maxLength="10"
             value={key}
             onChange={(e) => onChange(e)}
           />
@@ -75,6 +77,7 @@ function EditProjectForm({
             type="text"
             name="url"
             id="url"
+            maxLength="5000"
             value={url}
             className="form__input"
             onChange={(e) => onChange(e)}

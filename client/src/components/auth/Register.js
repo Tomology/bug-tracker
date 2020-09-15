@@ -107,7 +107,15 @@ const Register = ({
 
     register({ firstName, lastName, email, password });
 
-    if (validationError.length === 0) {
+    if (
+      validationError.length === 0 &&
+      !invalidEmail &&
+      !invalidFirstName &&
+      !invalidLastName &&
+      !invalidPassword &&
+      !invalidPassword2 &&
+      !passwordMatch
+    ) {
       document.getElementById("REGISTER").value = "REGISTERING...";
     }
   };
@@ -133,6 +141,7 @@ const Register = ({
         className="auth__register--email-input form__input"
         type="text"
         name="email"
+        maxLength="320"
         value={email}
         onChange={(e) => onChange(e)}
       />
@@ -151,6 +160,7 @@ const Register = ({
         className="auth__register--firstName-input form__input"
         type="text"
         name="firstName"
+        maxLength="50"
         value={firstName}
         onChange={(e) => onChange(e)}
       />
@@ -166,6 +176,7 @@ const Register = ({
         className="auth__register--lastName-input form__input"
         type="text"
         name="lastName"
+        maxLength="50"
         value={lastName}
         onChange={(e) => onChange(e)}
       />

@@ -99,6 +99,7 @@ export const EditIssueForm = ({
             name="issueName"
             id="issueName"
             className="form__input"
+            maxLength="50"
             value={issueName}
             onChange={(e) => onChange(e)}
           />
@@ -138,6 +139,7 @@ export const EditIssueForm = ({
             name="summary"
             id="summary"
             className="form__input"
+            maxLength="10000"
             value={summary}
             onChange={(e) => onChange(e)}
           />
@@ -148,6 +150,7 @@ export const EditIssueForm = ({
             name="description"
             className="form__input"
             id="description"
+            maxLength="50000"
             value={description}
             onChange={(e) => onChange(e)}
           />
