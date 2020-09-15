@@ -54,6 +54,11 @@ function InviteTeamMembers({ people, team, addPeopleToggle, editTeam }) {
             </button>
             <button
               type="submit"
+              disabled={
+                !formData.members || formData.members.length === 0
+                  ? true
+                  : false
+              }
               className="btn btn-green btn-form popup__form--create"
             >
               Send Invites
