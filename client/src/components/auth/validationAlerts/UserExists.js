@@ -10,7 +10,9 @@ function InvalidCredentials({ validationError }) {
     validationError
       .filter((error) => error.msg === "This e-mail is already in use")
       .map((error) => (
-        <span className="auth__register--email-validation">{error.msg}</span>
+        <span key={error.msg} className="auth__register--email-validation">
+          {error.msg}
+        </span>
       ))
   );
 }

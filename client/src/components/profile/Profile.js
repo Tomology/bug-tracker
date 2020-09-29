@@ -72,7 +72,11 @@ const Profile = ({
           <div className="profile__yourProjects">
             <h3>Projects You've Created</h3>
             <div className="profile__yourProjects--projects">
-              {projects && projects.length > 0 ? (
+              {projects &&
+              projects.length > 0 &&
+              projects.filter(
+                (project) => project.user._id === match.params.user_id
+              ).length > 0 ? (
                 projects
                   .filter(
                     (project) => project.user._id === match.params.user_id
@@ -91,7 +95,10 @@ const Profile = ({
           <div className="profile__yourTeams">
             <h3>Teams You've Created</h3>
             <div className="profile__yourTeams--teams">
-              {teams && teams.length > 0 ? (
+              {teams &&
+              teams.length > 0 &&
+              teams.filter((team) => team.creator._id === match.params.user_id)
+                .length > 0 ? (
                 teams
                   .filter((team) => team.creator._id === match.params.user_id)
                   .map((team) => <TeamItem key={team._id} team={team} />)
@@ -127,7 +134,7 @@ const Profile = ({
               projects
                 .filter(
                   (project) =>
-                    project.user === match.params.user_id ||
+                    project.user._id === match.params.user_id ||
                     project.sharedWith
                       .map((sharee) => sharee._id)
                       .indexOf(match.params.user_id) !== -1

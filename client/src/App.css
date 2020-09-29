@@ -1193,6 +1193,7 @@ body {
 .profile__main .noItems {
   margin-left: 0.5rem;
   color: #777;
+  grid-column: 1 / -1;
 }
 .profile__receivedRequests {
   grid-column: 1 / -1;
@@ -1256,7 +1257,7 @@ body {
 .profile__yourProjects--projects {
   border: 3px solid #eee;
   border-radius: 4px;
-  padding: 0.25rem;
+  padding: 1rem;
 }
 .profile__yourProjects--projects-projectItem {
   transition: all 0.2s;
@@ -1283,7 +1284,7 @@ body {
 .profile__yourTeams--teams {
   border: 3px solid #eee;
   border-radius: 4px;
-  padding: 1rem 1rem;
+  padding: 1rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
@@ -1523,6 +1524,11 @@ body {
 .project__main .issue__main--comments-postedComments-commentItem {
   display: flex;
   flex-direction: column;
+  margin-bottom: 3rem;
+}
+.project__main .issue__main--comments-postedComments-commentItem a,
+.project__main .issue__main--comments-postedComments-commentItem a:visited {
+  text-decoration: none;
 }
 .project__main .issue__main--comments-postedComments-commentItem-user {
   display: flex;
@@ -1532,12 +1538,17 @@ body {
 .project__main .issue__main--comments-postedComments-commentItem-user .avatar {
   height: 2.5rem;
   width: 2.5rem;
-  background-color: black;
   border-radius: 4rem;
 }
 .project__main .issue__main--comments-postedComments-commentItem-user .name {
   font-size: 1.3rem;
   margin-left: 1rem;
+  color: #777;
+}
+.project__main
+  .issue__main--comments-postedComments-commentItem-user
+  .name:hover {
+  text-decoration: underline;
 }
 .project__main .issue__main--comments-postedComments-commentItem p {
   font-size: 1.3rem;
@@ -1583,6 +1594,31 @@ body {
   display: flex;
   flex-direction: column;
   margin-top: 3.5rem;
+}
+.project__main .issue__side--status a,
+.project__main .issue__side--status a:visited,
+.project__main .issue__side--assignee a,
+.project__main .issue__side--assignee a:visited,
+.project__main .issue__side--reporter a,
+.project__main .issue__side--reporter a:visited,
+.project__main .issue__side--priority a,
+.project__main .issue__side--priority a:visited,
+.project__main .issue__side--dueDate a,
+.project__main .issue__side--dueDate a:visited {
+  text-decoration: none;
+  color: #777;
+}
+.project__main .issue__side--status a:hover,
+.project__main .issue__side--status a:visited:hover,
+.project__main .issue__side--assignee a:hover,
+.project__main .issue__side--assignee a:visited:hover,
+.project__main .issue__side--reporter a:hover,
+.project__main .issue__side--reporter a:visited:hover,
+.project__main .issue__side--priority a:hover,
+.project__main .issue__side--priority a:visited:hover,
+.project__main .issue__side--dueDate a:hover,
+.project__main .issue__side--dueDate a:visited:hover {
+  text-decoration: underline;
 }
 .project__main .issue__side--status span,
 .project__main .issue__side--assignee span,
@@ -1649,8 +1685,12 @@ body {
   width: 2.5rem;
   border-radius: 4rem;
 }
+.project__main .issue__side--reporter-item .avatar:hover {
+  text-decoration: none;
+}
 .project__main .issue__side--reporter-item .name {
   margin-left: 1rem;
+  color: #000;
 }
 .project__main .issue__side--buttons {
   margin-top: 1rem;
@@ -1752,6 +1792,7 @@ body {
   margin-top: 3rem;
   text-align: left;
   border-collapse: collapse;
+  width: 100%;
 }
 .projects__list a {
   text-decoration: none;

@@ -23,7 +23,7 @@ function TeamSide({
 
   const teamMembers = members.map((member) => (
     <div className="team__members--list-memberItem" key={member._id}>
-      <Link to="#">
+      <Link to={`/people/${member._id}`}>
         <Avatar
           className="team__members--list-memberItem-avatar"
           name={`${member.firstName} ${member.lastName}`}
@@ -70,7 +70,10 @@ function TeamSide({
       )}
       <div className="team__side--teamCreator">
         <span className="team__side--teamCreator-title">Created by:</span>
-        <Link to="#" className="team__side--teamCreator-info">
+        <Link
+          to={`/people/${creator._id}`}
+          className="team__side--teamCreator-info"
+        >
           <Avatar
             className="team__side--teamCreator-info-avatar"
             name={`${creator.firstName} ${creator.lastName}`}

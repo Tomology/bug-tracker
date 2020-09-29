@@ -9,7 +9,10 @@ function InvalidCredentials({ validationError }) {
     validationError
       .filter((error) => error.msg === "Invalid Credentials")
       .map((error) => (
-        <span className="auth__login--password-validation form__validation">
+        <span
+          key={error.msg}
+          className="auth__login--password-validation form__validation"
+        >
           {error.msg}
         </span>
       ))

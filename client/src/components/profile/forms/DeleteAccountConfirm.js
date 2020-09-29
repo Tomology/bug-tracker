@@ -53,7 +53,12 @@ function DeleteAccountConfirm({
             >
               Cancel
             </button>
-            <button className="btn btn-form btn-danger">Confirm</button>
+            <button
+              disabled={email !== user.email}
+              className="btn btn-form btn-danger"
+            >
+              Confirm
+            </button>
           </div>
         </form>
       </div>

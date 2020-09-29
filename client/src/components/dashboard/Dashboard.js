@@ -17,8 +17,10 @@ const Dashboard = ({
   const currentUserId = localStorage.getItem("currentUserId");
 
   useEffect(() => {
-    getProfileById(currentUserId);
-    getOutstandingIssues(currentUserId);
+    if (currentUserId !== null) {
+      getProfileById(currentUserId);
+      getOutstandingIssues(currentUserId);
+    }
   }, [getProfileById, getOutstandingIssues, currentUserId]);
 
   return !profile || !outstandingIssues ? (
